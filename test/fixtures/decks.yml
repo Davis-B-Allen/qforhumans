@@ -1,5 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+qforhum:
+  name: Questions for Humans
+
 one:
   name: MyString
 
