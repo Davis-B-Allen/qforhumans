@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829001408) do
+ActiveRecord::Schema.define(version: 20170830191903) do
 
   create_table "cards", force: :cascade do |t|
     t.string "lens_prefix"
@@ -18,6 +18,13 @@ ActiveRecord::Schema.define(version: 20170829001408) do
     t.integer "deck_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "face_number"
+    t.integer "face_suit"
+    t.string "category"
+    t.text "me_reason"
+    t.text "me_question"
+    t.text "we_reason"
+    t.text "we_question"
     t.index ["deck_id"], name: "index_cards_on_deck_id"
   end
 
