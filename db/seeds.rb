@@ -6,4 +6,19 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-Deck.create!(name: "Questions for Humans")
+qforhum_deck = Deck.create!(name: "Questions for Humans")
+
+qforhum_deck.cards.create!(
+  lens_prefix: "The Lens of",
+  lens_name: "You"
+)
+
+qforhum_deck.cards.create!(
+  lens_prefix: "The Lens of",
+  lens_name: "People"
+)
+
+qforhum_deck.cards.create!(
+  lens_prefix: "The Lens of the",
+  lens_name: "World"
+)
