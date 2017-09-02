@@ -1,2 +1,45 @@
 module CardsHelper
+
+  # return correct card suit icon for given card
+  def icon_for(card)
+    case card.face_suit
+    when 0
+      "icon_150_heart.png"
+    when 1
+      "icon_150_heart.png"
+    when 2
+      "icon_150_club.png"
+    when 3
+      "icon_150_diamond.png"
+    when 4
+      "icon_150_spade.png"
+    else
+      "icon_150_heart.png"
+    end
+  end
+
+  # Return correct string character for face number for given card
+  def face_number_for(card)
+    case card.face_number
+    when 1
+      "A"
+    when 2,3,4,5,6,7,8,9,10
+      card.face_number.to_s
+    when 11
+      "J"
+    when 12
+      "Q"
+    when 12
+      "K"
+    when 14
+      "X"
+    else
+      "?"
+    end
+  end
+
+  def full_name_for(card)
+    "#{card.lens_prefix} #{card.lens_name}"
+  end
+
 end

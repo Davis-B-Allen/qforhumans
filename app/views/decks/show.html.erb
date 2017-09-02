@@ -1,1 +1,12 @@
 <h1><%= @deck.name %></h1>
+
+<div class="list-group">
+  <% @deck.cards.each do |card| %>
+    <!-- <%= link_to "#{card.lens_prefix} #{card.lens_name}", "#", class: "list-group-item" %> -->
+    <%= link_to card_path(card), class: "list-group-item" do %>
+      <%= face_number_for(card) %>
+      <%= image_tag(icon_for(card), size: 16, alt: "Clubs") %>
+      <%= full_name_for(card) %>
+    <% end %>
+  <% end %>
+</div>

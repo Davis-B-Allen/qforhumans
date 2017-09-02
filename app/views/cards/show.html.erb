@@ -1,0 +1,19 @@
+<h1>
+  <%= face_number_for(@card) %>
+  <%= image_tag(icon_for(@card), size: 32, alt: "Clubs") %>
+  <%= full_name_for(@card) %>
+</h1>
+
+<p>
+  Level: <%= @card.category %>
+</p>
+
+<p>
+  <%= @card.me_reason %>
+  <%= @card.me_question %>
+</p>
+
+<p>
+  <%= @card.we_reason %>
+  <%= @card.we_question %>
+</p>
