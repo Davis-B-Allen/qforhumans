@@ -18,10 +18,9 @@ function applyFilters() {
       activeSuits.push(cardFilterButton.dataset.suit);
     }
   }
-  console.log(activeSuits);
-  $("#card-list a").addClass("hidden")
+  $("#card-list a").addClass("hidden");
   if (activeSuits.length == 0) {
-    $("#card-list a").removeClass("hidden")
+    $("#card-list a").removeClass("hidden");
   } else {
     var suitClassList = activeSuits.map(function(suit) {return "." + suit}).join(", ");
     $("#card-list a").filter(suitClassList).removeClass("hidden");
