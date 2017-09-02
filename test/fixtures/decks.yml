@@ -1,10 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 qforhum:
+  id: 1
   name: Questions for Humans
 
 one:
+  id: 2
   name: MyString
 
 two:
+  id: 3
   name: MyString
