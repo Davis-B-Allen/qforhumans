@@ -1,5 +1,23 @@
 module CardsHelper
 
+  # return correct card suit for given card
+  def suit_for(card)
+    case card.face_suit
+    when 0
+      "joker"
+    when 1
+      "hearts"
+    when 2
+      "clubs"
+    when 3
+      "diamonds"
+    when 4
+      "spades"
+    else
+      "unknown"
+    end
+  end
+
   # return correct card suit icon for given card
   def icon_for(card)
     case card.face_suit
