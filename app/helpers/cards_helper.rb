@@ -3,8 +3,6 @@ module CardsHelper
   # return correct card suit for given card
   def suit_for(card)
     case card.face_suit
-    when 0
-      "joker"
     when 1
       "hearts"
     when 2
@@ -13,6 +11,10 @@ module CardsHelper
       "diamonds"
     when 4
       "spades"
+    when 5
+      "joker"
+    when 6
+      "joker"
     else
       "unknown"
     end
@@ -21,8 +23,6 @@ module CardsHelper
   # return correct card suit icon for given card
   def icon_for(card)
     case card.face_suit
-    when 0
-      "icon_150_heart.png"
     when 1
       "icon_150_heart.png"
     when 2
@@ -31,6 +31,10 @@ module CardsHelper
       "icon_150_diamond.png"
     when 4
       "icon_150_spade.png"
+    when 5
+      "icon_150_club.png"
+    when 6
+      "icon_150_diamond.png"
     else
       "icon_150_heart.png"
     end
@@ -47,10 +51,10 @@ module CardsHelper
       "J"
     when 12
       "Q"
-    when 12
+    when 13
       "K"
     when 14
-      "X"
+      ""
     else
       "?"
     end
