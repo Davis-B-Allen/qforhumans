@@ -1,0 +1,40 @@
+<div class="decks-sortinggame">
+  <%= content_tag "div", id: "card-data-div", data: {cards: @deck.cards.card_ordered } do %>
+  <% end %>
+
+  <h1>Stupidest Card Game</h1>
+
+  <div class="row" id="sg-instructions">
+    Text to walk you through
+  </div>
+
+  <div class="row" id="card-choices">
+    <div class="col-sm-3">
+      <div class="qcard2">
+        card
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="qcard2">
+        card
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="qcard2">
+        card
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="qcard2">
+        card
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <span>
+      <button id="back-button" class="btn btn-primary" type="submit">Back</button>
+      <button id="next-button" class="btn btn-primary" type="submit">Next</button>
+    </span>
+  </div>
+</div>

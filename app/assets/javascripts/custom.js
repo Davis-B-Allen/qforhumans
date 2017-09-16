@@ -27,9 +27,19 @@ function applyFilters() {
   }
 }
 
-$(document).on('turbolinks:load', function() {
-  $( "#card-list-filters button" ).click(function() {
-    toggleButtonState(this);
-    applyFilters();
-  });
+
+// // Note: see https://stackoverflow.com/questions/39472936/how-should-i-handle-event-listeners-on-page-elements-when-using-turbolinks-5-in
+// $(document).on('turbolinks:load', function() {
+//   // alert("custom.js document ready");
+//   console.log("*****Trying to attach handlers to the card filters buttons");
+//   $( "#card-list-filters button" ).click(function() {
+//     toggleButtonState(this);
+//     applyFilters();
+//   });
+//   console.log("*****JUST TRIED to attach handlers to the card filters buttons");
+// });
+
+$(document).on('click', '#card-list-filters button', function(e) {
+  toggleButtonState(this);
+  applyFilters();
 });

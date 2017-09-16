@@ -2,7 +2,11 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   # get 'decks/show'
-  resources :decks, only: [:show]
+  resources :decks, only: [:show] do
+    member do
+      get :sorting_game
+    end
+  end
   resources :cards, only: [:show]
 
   get '/cards', to: 'decks#featured'

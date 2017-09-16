@@ -1,3 +1,28 @@
 // Place all the styles related to the Decks controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.decks-sortinggame {
+  .sg-qcard {
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+
+  .locked {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  .sg-qcard.good-card {
+    background: lightgreen;
+  }
+
+  .sg-qcard.neutral-card {
+    background: lightgrey;
+  }
+
+  .sg-qcard.stupid-card{
+    background: red;
+  }
+
+}
