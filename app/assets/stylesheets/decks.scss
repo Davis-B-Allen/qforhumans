@@ -3,9 +3,25 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .decks-sortinggame {
+  #card-choices {
+    margin-bottom: 50px
+  }
+
   .sg-qcard {
     cursor: pointer;
+    margin-top: 5px;
     margin-bottom: 10px;
+    border-radius: 25px;
+    padding: 20px;
+
+    h3 {
+      margin-top: 0;
+    }
+
+    .suit-icon {
+      position: relative;
+      top: -5px;
+    }
   }
 
   .locked {
@@ -25,4 +41,12 @@
     background: red;
   }
 
+  .sg-buttons {
+    text-align: center;
+    background: grey;
+    span button {
+      display: inline-block;
+      margin: 10px
+    }
+  }
 }
