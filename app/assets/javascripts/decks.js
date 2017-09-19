@@ -75,10 +75,8 @@
       /*  maybe grab goodPile data and start building and object that can be logged
           with AJAX call to record history of game? */
       if (roundHandSize > 3) {
-        drawSeveralRundown(roundHandSize - 1);
+        drawSeveralRundown(roundHandSize - 1, true);
       } else {
-        // START THE BINARY RUNDOWNS
-        console.log("DONT RUN ANOTHER drawSeveralRundown !!!");
         startBinaryRundowns(roundHandSize - 1);
       }
     }
@@ -87,13 +85,14 @@
   function drawTwoSubmitRound() {
     console.log("submitting 2222 round!");
     $('.decks-sortinggame #card-choices .sg-qcard').each(function(i,card) {
-      if ($(card).hasClass('good-card')) {
-        transferCard(roundCards, goodPile, parseInt(card.dataset.cardid))
-      } else if ($(card).hasClass('neutral-card')) {
+      if ($(card).hasClass('stupid-card')) {
         transferCard(roundCards, stupidPile, parseInt(card.dataset.cardid))
+      } else if ($(card).hasClass('neutral-card')) {
+        transferCard(roundCards, goodPile, parseInt(card.dataset.cardid))
       }
     });
     if (reservePile.length > 0) {
+      console.log(reservePile.length + " Cards Left");
       playDrawTwoRound();
     } else {
       console.log("remaining Piles:");
@@ -123,7 +122,7 @@
     console.log("The stupidest Card is: " + reservePile[0].lens_prefix + " " + reservePile[0].lens_name);
   }
 
-  function multiCardOnCardClick() {
+  function onCardClick() {
     if ($(this).hasClass('locked')) {
       console.log("Card is locked");
     } else {
@@ -135,34 +134,29 @@
     }
   }
 
-  function twoCardOnCardClick() {
-    if ($(this).hasClass('locked')) {
-      console.log("Card is locked");
-    } else {
-      $('.decks-sortinggame #card-choices .sg-qcard').not(".locked").removeClass("good-card neutral-card stupid-card");
-      $('.decks-sortinggame #card-choices .sg-qcard').not(".locked").not(this).addClass("neutral-card");
-      $(this).addClass("good-card");
-      $('.decks-sortinggame #next-button').removeClass('disabled');
-    }
-  }
-
-  function multiCardOnNextClick() {
+  function onNextClick() {
     if ($(this).hasClass('disabled')) {
       return;
     }
     if (gameChoicePhase == "best") {
-      $('.decks-sortinggame #card-choices .sg-qcard.good-card').addClass("locked")
-      chooseWorstOfSeveral();
+      $('.decks-sortinggame #card-choices .sg-qcard.good-card').addClass("locked");
+      chooseWorstOf(roundHandSize);
       $('body').scrollTop(0);
     } else if (gameChoicePhase == "worst") {
-      drawSeveralSubmitRound();
+      if (roundHandSize > 2) {
+        drawSeveralSubmitRound();
+        $('body').scrollTop(0);
+      } else {
+        drawTwoSubmitRound();
+        $('body').scrollTop(0);
+      }
       $('body').scrollTop(0);
     } else {
       console.log("UNEXPECTED VALUE FOR gameChoicePhase");
     }
   }
 
-  function multiCardOnBackClick() {
+  function onBackClick() {
     if ($(this).hasClass('disabled')) {
       return;
     }
@@ -171,31 +165,19 @@
     $('body').scrollTop(0);
   }
 
-  function twoCardOnNextClick() {
-    if ($(this).hasClass('disabled')) {
-      return;
-    }
-    if (gameChoicePhase == "best") {
-      drawTwoSubmitRound();
-      $('body').scrollTop(0);
-    } else {
-      console.log("UNEXPECTED VALUE FOR gameChoicePhase");
-    }
-  }
-
   function configureDrawSeveralButtons() {
     $('.decks-sortinggame #back-button').show();
     $('.decks-sortinggame #next-button').unbind();
     $('.decks-sortinggame #back-button').unbind();
-    $('.decks-sortinggame #next-button').on( "click", multiCardOnNextClick);
-    $('.decks-sortinggame #back-button').on( "click", multiCardOnBackClick);
+    $('.decks-sortinggame #next-button').on( "click", onNextClick);
+    $('.decks-sortinggame #back-button').on( "click", onBackClick);
   }
 
   function configureDrawTwoButtons() {
     $('.decks-sortinggame #back-button').hide();
     $('.decks-sortinggame #next-button').unbind();
     $('.decks-sortinggame #back-button').unbind();
-    $('.decks-sortinggame #next-button').on( "click", twoCardOnNextClick);
+    $('.decks-sortinggame #next-button').on( "click", onNextClick);
   }
 
   function chooseBestOfSeveral() {
@@ -205,17 +187,17 @@
     $('.decks-sortinggame #next-button').addClass('disabled');
   }
 
-  function chooseBestOfTwo() {
-    gameChoicePhase = "best";
-    $('.decks-sortinggame #sg-instructions').html('Of these two cards, choose the best:');
-    $('.decks-sortinggame #back-button').addClass('disabled');
-    $('.decks-sortinggame #next-button').addClass('disabled');
-  }
-
-  function chooseWorstOfSeveral() {
+  function chooseWorstOf(ofHowMany) {
+    var instructionText;
+    if (ofHowMany == 2) {
+      instructionText = "******* Of these two cards, choose the worst:";
+      $('.decks-sortinggame #back-button').addClass('disabled');
+    } else {
+      instructionText = "******* Of the remaining cards, choose the worst:";
+      $('.decks-sortinggame #back-button').removeClass('disabled');
+    }
     gameChoicePhase = "worst";
-    $('.decks-sortinggame #sg-instructions').html('Of the remaining cards, choose the worst:');
-    $('.decks-sortinggame #back-button').removeClass('disabled');
+    $('.decks-sortinggame #sg-instructions').html(instructionText);
     $('.decks-sortinggame #next-button').addClass('disabled');
   }
 
@@ -239,19 +221,14 @@
     iiDiv.setAttribute('data-cardid', cardDataElement.id);
     cardChoices.appendChild(iDiv);
     iDiv.appendChild(iiDiv);
-
     var cardH = document.createElement('h3');
     cardH.innerHTML = cardDataElement.lens_prefix + " " + cardDataElement.lens_name;
-
     var cardP1 = document.createElement('p');
     cardP1.innerHTML = "Level: " + cardDataElement.category;
-
     var cardP2 = document.createElement('p');
     cardP2.innerHTML = cardDataElement.me_reason + " " + cardDataElement.me_question;
-
     var cardP3 = document.createElement('p');
     cardP3.innerHTML = cardDataElement.we_reason + " " + cardDataElement.we_question;
-
     iiDiv.appendChild(cardH);
     iiDiv.appendChild(cardP1);
     iiDiv.appendChild(cardP2);
@@ -265,7 +242,7 @@
       roundCards.forEach(function(card) {
         addCard(card);
       });
-      $('.decks-sortinggame #card-choices .sg-qcard').on( "click", multiCardOnCardClick);
+      $('.decks-sortinggame #card-choices .sg-qcard').on( "click", onCardClick);
       chooseBestOfSeveral();
     } else {
       console.log("NOT ENOUGH CARDS LEFT!!!");
@@ -279,16 +256,18 @@
       roundCards.forEach(function(card) {
         addCard(card);
       });
-      $('.decks-sortinggame #card-choices .sg-qcard').on( "click", twoCardOnCardClick);
-      chooseBestOfTwo();
+      $('.decks-sortinggame #card-choices .sg-qcard').on( "click", onCardClick);
+      chooseWorstOf(roundHandSize);
     } else {
       console.log("NOT ENOUGH CARDS LEFT!!!");
     }
   }
 
   // NOTE: Never call this with fewer than 3 numCardsPerRound OR WE'LL HAVE PROBLEMS
-  function drawSeveralRundown(numCardsPerRound) {
-    shuffle(reservePile);
+  function drawSeveralRundown(numCardsPerRound, shouldShuffle) {
+    if (shouldShuffle) {
+      shuffle(reservePile);
+    }
     roundHandSize = numCardsPerRound;
     configureDrawSeveralButtons();
     if (reservePile.length > 0) {
@@ -328,7 +307,7 @@
     });
     // reservePile = reservePile.slice(0,12);
     // NOTE: reservePile length MUST BE A MULTIPLE OF 4 OTHERWISE WE'LL HAVE PROBLEMS
-    drawSeveralRundown(4);
+    drawSeveralRundown(4, false);
   }
 
   $(document).on('turbolinks:load', function() {
