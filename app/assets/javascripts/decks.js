@@ -222,17 +222,11 @@
     cardChoices.appendChild(iDiv);
     iDiv.appendChild(iiDiv);
     var cardH = document.createElement('h3');
-    cardH.innerHTML = cardDataElement.lens_prefix + " " + cardDataElement.lens_name;
+    cardH.innerHTML = cardDataElement.lens_name;
     var cardP1 = document.createElement('p');
-    cardP1.innerHTML = "Level: " + cardDataElement.category;
-    var cardP2 = document.createElement('p');
-    cardP2.innerHTML = cardDataElement.me_reason + " " + cardDataElement.me_question;
-    var cardP3 = document.createElement('p');
-    cardP3.innerHTML = cardDataElement.we_reason + " " + cardDataElement.we_question;
+    cardP1.innerHTML = "Ask yourself: " + cardDataElement.me_question;
     iiDiv.appendChild(cardH);
     iiDiv.appendChild(cardP1);
-    iiDiv.appendChild(cardP2);
-    iiDiv.appendChild(cardP3);
   }
 
   function playDrawSeveralRound(numCardsPerRound) {

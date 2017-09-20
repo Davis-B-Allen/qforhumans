@@ -40,6 +40,26 @@ module CardsHelper
     end
   end
 
+  # return correct card suit icon for given card
+  def icon_char_for(card)
+    case card.face_suit
+    when 1
+      "♥"
+    when 2
+      "♣"
+    when 3
+      "♦"
+    when 4
+      "♠"
+    when 5
+      "♣"
+    when 6
+      "♦"
+    else
+      "♠"
+    end
+  end
+
   # Return correct string character for face number for given card
   def face_number_for(card)
     case card.face_number

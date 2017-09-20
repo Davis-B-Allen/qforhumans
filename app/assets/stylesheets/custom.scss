@@ -15,21 +15,6 @@ body {
   float: right;
 }
 
-.qcard {
-  border-radius: 25px;
-  background: lightblue;
-  padding: 20px;
-
-  h1 {
-    margin-top: 0;
-  }
-
-  .suit-icon {
-    position: relative;
-    top: -5px;
-  }
-}
-
 @media (min-width: 768px) {
   .deck-header-row {
     position: relative;
