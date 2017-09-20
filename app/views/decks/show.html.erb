@@ -1,39 +1,41 @@
-<div class="row deck-header-row">
-  <div class="col-md-6 deck-header-name">
-    <h1><%= @deck.name %></h1>
-  </div>
-  <div class="col-md-6 deck-header-buttons">
-    <div class="deck-header-button-group">
-      <div class="btn-group" id="card-list-filters" role="group" aria-label="...">
-        <button type="button" class="btn btn-default" data-suit="hearts">
-          <%= image_tag("icon_150_heart.png", size: 16, alt: "hearts") %>
-        </button>
-        <button type="button" class="btn btn-default" data-suit="clubs">
-          <%= image_tag("icon_150_club.png", size: 16, alt: "clubs") %>
-        </button>
-        <button type="button" class="btn btn-default" data-suit="diamonds">
-          <%= image_tag("icon_150_diamond.png", size: 16, alt: "diamonds") %>
-        </button>
-        <button type="button" class="btn btn-default" data-suit="spades">
-          <%= image_tag("icon_150_spade.png", size: 16, alt: "spades") %>
-        </button>
-        <button type="button" class="btn btn-default" data-suit="joker">
-          <%= image_tag("icon_150_heart.png", size: 16, alt: "jokers") %>
-        </button>
+<div class="decks-show">
+  <div class="row deck-header-row">
+    <div class="col-md-6 deck-header-name">
+      <h1><%= @deck.name %></h1>
+    </div>
+    <div class="col-md-6 deck-header-buttons">
+      <div class="deck-header-button-group">
+        <div class="btn-group" id="card-list-filters" role="group" aria-label="...">
+          <button type="button" class="btn btn-default" data-suit="hearts">
+            <%= image_tag("icon_150_heart.png", size: 16, alt: "hearts") %>
+          </button>
+          <button type="button" class="btn btn-default" data-suit="clubs">
+            <%= image_tag("icon_150_club.png", size: 16, alt: "clubs") %>
+          </button>
+          <button type="button" class="btn btn-default" data-suit="diamonds">
+            <%= image_tag("icon_150_diamond.png", size: 16, alt: "diamonds") %>
+          </button>
+          <button type="button" class="btn btn-default" data-suit="spades">
+            <%= image_tag("icon_150_spade.png", size: 16, alt: "spades") %>
+          </button>
+          <button type="button" class="btn btn-default" data-suit="joker">
+            <%= image_tag("icon_150_heart.png", size: 16, alt: "jokers") %>
+          </button>
+        </div>
+        <%= link_to "?", random_path, class: "btn btn-default", role: "button" %>
       </div>
-      <%= link_to "?", random_path, class: "btn btn-default", role: "button" %>
     </div>
   </div>
-</div>
 
-<div class="list-group" id="card-list">
-  <% @deck.cards.card_ordered.each do |card| %>
-    <%= link_to card_path(card), class: "list-group-item #{suit_for(card)}", data: { suit: suit_for(card) } do %>
-      <%= face_number_for(card) %>
-      <%= image_tag(icon_for(card), size: 16, alt: suit_for(card)) %>
-      <%= full_name_for(card) %>
+  <div class="list-group" id="card-list">
+    <% @deck.cards.card_ordered.each do |card| %>
+      <%= link_to card_path(card), class: "list-group-item #{suit_for(card)}", data: { suit: suit_for(card) } do %>
+        <%= face_number_for(card) %>
+        <%= image_tag(icon_for(card), size: 16, alt: suit_for(card)) %>
+        <%= full_name_for(card) %>
+      <% end %>
     <% end %>
-  <% end %>
-</div>
+  </div>
 
-<%= link_to "Find the Stupidest Card", sorting_game_deck_path(@deck) %>
+  <%= link_to "Find the Stupidest Card", sorting_game_deck_path(@deck) %>  
+</div>

@@ -1,6 +1,9 @@
-// Script for a simple game to sort deck down to identify the worst card
-// Runs when served by decks#sorting_game
-// with the app/views/decks/sorting_game.html.erb template
+/*
+    Script for a simple game to sort deck down to identify the worst card
+    Runs when served by decks#sorting_game
+    with the app/views/decks/sorting_game.html.erb template
+ */
+
 (function() {
   var goodPile = [];
   var discardPile = [];
@@ -190,10 +193,10 @@
   function chooseWorstOf(ofHowMany) {
     var instructionText;
     if (ofHowMany == 2) {
-      instructionText = "******* Of these two cards, choose the worst:";
+      instructionText = "---******* Of these two cards, choose the worst:";
       $('.decks-sortinggame #back-button').addClass('disabled');
     } else {
-      instructionText = "******* Of the remaining cards, choose the worst:";
+      instructionText = "---******* Of the remaining cards, choose the worst:";
       $('.decks-sortinggame #back-button').removeClass('disabled');
     }
     gameChoicePhase = "worst";
@@ -304,8 +307,26 @@
     drawSeveralRundown(4, false);
   }
 
+  /**
+   * NOTE: Relies on page body tag having data attributes
+   * data-controller and data-action, which store the name
+   * of the controller and action that served the page, respectively
+   * @param  {Array}  allowedControllers array of strings representing allowed controller names
+   * @param  {Array}  allowedActions     array of strings representing allowed action names
+   * @return {Boolean}                    boolean representing whether current page was served by
+   *                                      controller/action found in allowed set of values
+   */
+  function jsAllowedOnThisPage(allowedControllers, allowedActions) {
+    var currentController = $('body').data('controller');
+    var currentAction = $('body').data('action');
+    function arrayIncludesElement(arr, el) { return (!(arr.indexOf(el) === -1)); }
+    return (( arrayIncludesElement(allowedControllers, currentController) && arrayIncludesElement(allowedActions, currentAction) ));
+  }
+
   $(document).on('turbolinks:load', function() {
-    if (!($('body').data('controller') === 'decks' && $('body').data('action') === 'sorting_game')) {
+    var allowedControllers = ["decks"];
+    var allowedActions = ["sorting_game"];
+    if (!(jsAllowedOnThisPage(allowedControllers, allowedActions))) {
       return;
     }
 
