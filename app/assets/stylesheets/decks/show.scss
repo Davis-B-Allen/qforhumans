@@ -1,0 +1,21 @@
+.decks-show {
+  #card-list {
+    margin-top: 10px;
+  }
+
+  .deck-header-button-group {
+    float: right;
+  }
+
+  @media (min-width: 768px) {
+    .deck-header-row {
+      position: relative;
+    }
+
+    .deck-header-buttons {
+      position: absolute;
+      bottom:0;
+      right:0;
+    }
+  }
+}
