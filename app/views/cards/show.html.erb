@@ -30,15 +30,19 @@
           </table>
         </div>
         <div class="q-card-content-inner">
-          <h1>
-            <%= @card.lens_name %>
-          </h1>
-          <p>
-            Ask yourself:
-          </p>
-          <p>
-            <%= @card.me_question %>
-          </p>
+          <div class="q-card-name">
+            <h1>
+              <%= @card.lens_name %>
+            </h1>
+          </div>
+          <div class="q-card-question">
+            <p>
+              Ask yourself:
+            </p>
+            <p>
+              <%= @card.me_question %>
+            </p>
+          </div>
         </div>
       </div>
     </div>
