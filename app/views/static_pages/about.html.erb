@@ -1,4 +1,7 @@
 <% provide(:title, "About") %>
+<% content_for :page_specific_javascripts do %>
+  <%= javascript_include_tag 'testdba', 'data-turbolinks-track': 'reload' %>
+<% end %>
 <h1>About</h1>
 <p>This is the about page for Q54</p>
 <p>About</p>
