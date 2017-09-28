@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>cardExportTest</title>
+    <%= stylesheet_link_tag "cards/cards" %>
+  </head>
+
+  <body>
+
+    <div class="export-container">
+      <%= render 'layouts/card' %>
+    </div>
+
+    <script type="text/javascript">
+      var qcard = document.getElementsByClassName('qcard')[0];
+      var qcardWidth = qcard.scrollWidth;
+
+      var qCardInner = document.getElementsByClassName('q-card-content-inner')[0];
+      var numberSuits = document.getElementsByClassName('number-suit');
+
+      for(var i = 0; i < numberSuits.length; i++)
+      {
+         numberSuits[i].style.fontSize = (qcardWidth / 8.5) + "px";
+      }
+      qCardInner.style.fontSize = (qcardWidth / 15) + "px";
+    </script>
+
+  </body>
+</html>

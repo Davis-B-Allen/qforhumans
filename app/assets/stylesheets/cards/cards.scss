@@ -2,12 +2,24 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.export-container {
+  font-size: 14px;
+  h1 {
+    font-weight: 500;
+    line-height: 1.1;
+  }
+}
+
 .qcard {
   position: relative;
   border-radius: 25px;
   width: 100%;
   background: #eeeeee;
   border: 1px solid black;
+
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  line-height: 1.428571429;
+
 
   .q-card-spacer {
     display: block;
@@ -55,6 +67,7 @@
     .top {top:0;}
     .bottom {
       bottom:0;
+      -webkit-transform: rotate(180deg);
       transform: rotate(180deg);
     }
     .left {left:0;}

@@ -1,5 +1,10 @@
 class CardsController < ApplicationController
 
+  def test
+    @card = Card.order("RANDOM()").first
+    render layout: false
+  end
+
   def show
     @card = Card.find(params[:id])
   end

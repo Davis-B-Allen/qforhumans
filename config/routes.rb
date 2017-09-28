@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     end
   end
   resources :cards, only: [:show]
+  get '/test', to: 'cards#test'
 
   get '/cards', to: 'decks#featured'
 
