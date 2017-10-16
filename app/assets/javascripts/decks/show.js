@@ -51,13 +51,17 @@
     return (( arrayIncludesElement(allowedControllers, currentController) && arrayIncludesElement(allowedActions, currentAction) ));
   }
 
-  $(document).on('turbolinks:load', function() {
-    var allowedControllers = ["decks"];
-    var allowedActions = ["show", "featured"];
-    if (!(jsAllowedOnThisPage(allowedControllers, allowedActions))) {
-      return;
-    }
+  // $(document).on('turbolinks:load', function() {
+  //   var allowedControllers = ["decks"];
+  //   var allowedActions = ["show", "featured"];
+  //   if (!(jsAllowedOnThisPage(allowedControllers, allowedActions))) {
+  //     return;
+  //   }
+  //
+  //   // put page specific javascript here
+  // });
 
+  $(document).ready(function() {
     $(document).on('click', '#card-list-filters button', function(e) {
       toggleButtonState(this);
       applyFilters();
