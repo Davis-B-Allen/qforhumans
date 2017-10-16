@@ -32,8 +32,17 @@
 
     // resize font
     resizeCardFont()
-    // set font to be resized on window resize
-    $(window).resize(resizeCardFont);
+  });
+
+  $(document).ready(function() {
+    $(window).resize(function() {
+      // window.currentController and window.currentAction are set in init.js
+      if (window.currentController === "cards" && window.currentAction === "show") {
+        resizeCardFont();
+      } else {
+        console.log("NOPPPEEEE");
+      }
+    });
   });
 
 })();

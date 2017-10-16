@@ -16,4 +16,5 @@
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require bootstrap/transition
-//= require_tree .
+//= require init
+//= require_tree ./composited
