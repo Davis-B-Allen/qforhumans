@@ -4,43 +4,33 @@
   </div>
   <div class="q-card-content <%= suit_for(@card) %>">
     <div class="number-suit top left">
-      <table>
-        <tr><td><span class="number-suit-face-number"><%= face_number_for(@card) %></span></td></tr>
-        <tr><td><span class="number-suit-face-icon shift"><%= icon_char_for(@card) %></span></td></tr>
-      </table>
+        <%= face_number_for(@card) %><br><%= icon_char_for(@card) %>
     </div>
-    <div class="number-suit top right">
-      <table>
-        <tr><td><span class="number-suit-face-number"><%= face_number_for(@card) %></span></td></tr>
-        <tr><td><span class="number-suit-face-icon shift"><%= icon_char_for(@card) %></span></td></tr>
-      </table>
+    <!-- <div class="number-suit top right">
+      <%= face_number_for(@card) %><br><%= icon_char_for(@card) %>
     </div>
     <div class="number-suit bottom left">
-      <table>
-        <tr><td><span class="number-suit-face-number"><%= face_number_for(@card) %></span></td></tr>
-        <tr><td><span class="number-suit-face-icon shift"><%= icon_char_for(@card) %></span></td></tr>
-      </table>
+      <%= face_number_for(@card) %><br><%= icon_char_for(@card) %>
     </div>
     <div class="number-suit bottom right">
-      <table>
-        <tr><td><span class="number-suit-face-number"><%= face_number_for(@card) %></span></td></tr>
-        <tr><td><span class="number-suit-face-icon shift"><%= icon_char_for(@card) %></span></td></tr>
-      </table>
-    </div>
-    <div class="q-card-content-inner">
-      <div class="q-card-name">
-        <h1 id="q-card-name-header">
+      <%= face_number_for(@card) %><br><%= icon_char_for(@card) %>
+    </div> -->
+    <div class="q-card-content-top">
+      <div class="vertical-align" id="q-card-name">
+        <h1>
           <%= @card.lens_name %>
         </h1>
       </div>
-      <div class="q-card-question">
+    </div>
+    <div class="q-card-content-middle">
+      <div class="one-third-align" id="q-card-question">
         <p>
-          Ask yourself:
-        </p>
-        <p id="q-card-question-text">
           <%= @card.me_question %>
         </p>
       </div>
+    </div>
+    <div class="q-card-footer">
+      You Against Humanity™ © 2017 Viral Virtue Inc.
     </div>
   </div>
 </div>

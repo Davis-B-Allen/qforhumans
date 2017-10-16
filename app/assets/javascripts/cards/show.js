@@ -4,8 +4,7 @@
 
 (function() {
   function resizeCardFont() {
-    $('.qcard .q-card-content .q-card-content-inner').css('font-size', ($('.qcard').width()/15).toString()+'px');
-    $('.qcard .q-card-content .number-suit').css('font-size', ($('.qcard').width()/8.5).toString()+'px');
+    $('.qcard').css('font-size', ($('.qcard').width()/26).toString()+'px');
   }
 
   /**
