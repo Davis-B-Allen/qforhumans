@@ -21,26 +21,6 @@ module CardsHelper
   end
 
   # return correct card suit icon for given card
-  def icon_for(card)
-    case card.face_suit
-    when 1
-      "icon_150_heart.png"
-    when 2
-      "icon_150_club.png"
-    when 3
-      "icon_150_diamond.png"
-    when 4
-      "icon_150_spade.png"
-    when 5
-      "icon_150_club.png"
-    when 6
-      "icon_150_diamond.png"
-    else
-      "icon_150_heart.png"
-    end
-  end
-
-  # return correct card suit icon for given card
   def icon_char_for(card)
     case card.face_suit
     when 1
