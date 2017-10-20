@@ -33,7 +33,7 @@ gem 'jbuilder', '~> 2.5'
 # Image upload
 gem 'carrierwave', '1.2.1'
 gem 'mini_magick', '4.8.0'
-gem 'fog', '1.42.0'
+gem 'fog-aws', '1.4.1'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
