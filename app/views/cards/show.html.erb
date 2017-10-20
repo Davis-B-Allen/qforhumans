@@ -2,4 +2,9 @@
   <div class="col-sm-4">
     <%= render 'layouts/card' %>
   </div>
+  <div class="col-sm-4">
+    <div class="qcard-back">
+      <%= image_tag @card.image.url if @card.image? %>
+    </div>
+  </div>
 </div>

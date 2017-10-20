@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170830191903) do
+ActiveRecord::Schema.define(version: 20171019215426) do
 
   create_table "cards", force: :cascade do |t|
     t.string "lens_prefix"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20170830191903) do
     t.text "me_question"
     t.text "we_reason"
     t.text "we_question"
+    t.string "image"
     t.index ["deck_id"], name: "index_cards_on_deck_id"
   end
 
