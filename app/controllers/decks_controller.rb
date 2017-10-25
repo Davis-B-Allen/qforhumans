@@ -5,7 +5,7 @@ class DecksController < ApplicationController
   end
 
   def featured
-    @deck = Deck.find(1)
+    @deck = Deck.featured
     render 'show'
   end
 
