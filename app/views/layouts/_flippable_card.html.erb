@@ -1,0 +1,15 @@
+<div class="card-container">
+  <div class="card-container-spacer"></div>
+  <div class="card-content-container">
+    <div class="card-shell flippable">
+      <div class="fcard flippable" onclick="this.classList.toggle('flipped');">
+        <div class="front">
+          <%= render 'layouts/card' %>
+        </div>
+        <div class="back">
+          <div class="qback" style="background-image: url('<%= @card.image.url if @card.image? %>');"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
