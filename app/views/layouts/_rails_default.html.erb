@@ -1,7 +1,7 @@
 <%= csrf_meta_tags %>
 
 <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-<%# TODO: Add a page_specific_javascripts_before yield here %>
+
+<%= yield :page_specific_javascripts_before %>
 <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-<%# TODO: Convert the following yield to page_specific_javascripts_after %>
-<%= yield :page_specific_javascripts %>
+<%= yield :page_specific_javascripts_after %>
