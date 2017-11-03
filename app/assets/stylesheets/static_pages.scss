@@ -1,3 +1,19 @@
 // Place all the styles related to the StaticPages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.homepage {
+  .download-pane {
+    margin: auto;
+    max-width: 300px;
+    text-align: center;
+    #download-button {
+      width: 100%;
+    }
+  }
+  .games-rules {
+    .panel-heading {
+      cursor: pointer;
+    }
+  }
+}

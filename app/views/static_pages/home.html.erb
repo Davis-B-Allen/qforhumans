@@ -1,10 +1,26 @@
-<h1>Welcome to Questions For Humans</h1>
-<p>This is the home page for Q54</p>
-<p>Home</p>
-<p>Home</p>
-<p>Home</p>
-<p>Home</p>
-<p>Home</p>
-<p>Home</p>
-<p>Home</p>
-<p>Home</p>
+<div class="homepage">
+  <div class="row">
+    <div class="col-sm-9">
+      <div class="intro-splash">
+        <h1>Cards Against Inanity</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+        </p>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="download-pane">
+        Download the cards and all rulesets:
+        <a id="download-button" class="btn btn-primary" href="https://s3.amazonaws.com/cardsagainstinanity/CAI_MainGameV0.pdf" role="button">Download</a>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="games-rules">
+        <h1>The Games:</h1>
+        <%= render 'layouts/rules_accordion' %>
+      </div>
+    </div>
+  </div>
+</div>
