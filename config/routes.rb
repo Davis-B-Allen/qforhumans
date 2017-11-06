@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'users/new'
+  get 'celebrities/random'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
@@ -13,6 +14,7 @@ Rails.application.routes.draw do
   get '/test', to: 'cards#test'
 
   get '/cards', to: 'decks#featured'
+  get '/signup', to: 'users#new'
 
   root 'static_pages#home'
   get '/help', to: 'static_pages#help'
