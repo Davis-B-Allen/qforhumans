@@ -1,4 +1,6 @@
-# TODO: Document this task
+# Make sure to include the desired .tsv file in lib/tsv
+# Call the task with:
+# rails create_celebrities[filename]
 
 require 'csv'
 
