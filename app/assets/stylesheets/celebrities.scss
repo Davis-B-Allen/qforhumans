@@ -14,7 +14,7 @@
     margin: 20px auto;
     height: 50px;
     width: 90%;
-    border: 5px solid black;
+    border: 5px solid grey;
     box-sizing: content-box;
   }
 
@@ -54,15 +54,15 @@
     transform-style: preserve-3d;
   }
 
-  .ring > :nth-child(odd) {
-    /*background-color: #ef5268;*/
-    background-color: #cccccc;
-  }
-
-  .ring > :nth-child(even) {
-    /*background-color: #ed7d8b;*/
-    background-color: #cccccc;
-  }
+  // .ring > :nth-child(odd) {
+  //   background-color: #ef5268;
+  //   background-color: #cccccc;
+  // }
+  //
+  // .ring > :nth-child(even) {
+  //   background-color: #ed7d8b;
+  //   background-color: #cccccc;
+  // }
 
   /*.ring > :nth-child(1) {
     background-color: #a6eea5;
@@ -78,6 +78,8 @@
     border-radius: 10px;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    background-color: #cccccc;
+    background-image: url('paper-repeating.jpg');
   }
 
   .ring-slat > p {

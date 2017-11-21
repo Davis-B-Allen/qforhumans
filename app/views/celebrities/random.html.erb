@@ -1,3 +1,9 @@
+<style type="text/css">
+  body {
+     background-image: url(<%= asset_path 'dark-stone-repeating.jpg' %>);
+  }
+</style>
+
 <div class="celebrities-random">
   <%= content_tag "div", id: "celebrities-data-div", data: {celebrities: @celebrities } do %>
   <% end %>
