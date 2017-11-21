@@ -26,7 +26,7 @@
     shuffle(celebs);
     var randCeleb = celebs[0];
     $('.celeb-display').html(
-      "<a href='" + randCeleb.wikilink + "' target='_blank'>" + randCeleb.name + "</a>"
+      "<a href='" + randCeleb.wikilink + "' target='_blank'>Look up on Wikipedia</a>"
     );
     posters = document.getElementsByClassName("ring-slat");
     for (var i = 0; i < posters.length; i++) {
@@ -38,7 +38,7 @@
     var celebs = JSON.parse($("#celebrities-data-div")[0].dataset.celebrities);
     var randCeleb = celebs[Math.floor(Math.random() * celebs.length)];
     $('.celeb-display').html(
-      "<a href='" + randCeleb.wikilink + "' target='_blank'>" + randCeleb.name + "</a>"
+      "<a href='" + randCeleb.wikilink + "' target='_blank'>Look up on Wikipedia</a>"
     );
   }
 
