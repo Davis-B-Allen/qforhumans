@@ -34,14 +34,6 @@
     }
   }
 
-  function suggestRandomCeleb() {
-    var celebs = JSON.parse($("#celebrities-data-div")[0].dataset.celebrities);
-    var randCeleb = celebs[Math.floor(Math.random() * celebs.length)];
-    $('.celeb-display').html(
-      "<a href='" + randCeleb.wikilink + "' target='_blank'>Look up on Wikipedia</a>"
-    );
-  }
-
   $(document).on('turbolinks:load', function() {
     var allowedControllers = ["celebrities"];
     var allowedActions = ["random"];
@@ -53,10 +45,6 @@
   });
 
   $(document).ready(function() {
-
-    $(document).on('click', '#suggest-celeb-button', function(e) {
-      suggestRandomCeleb();
-    });
 
     $(document).on('click', '#spin-button', function(e) {
       $('#slots-ring').removeClass("spinning");
