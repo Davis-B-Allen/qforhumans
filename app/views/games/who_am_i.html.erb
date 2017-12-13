@@ -1,0 +1,96 @@
+<div class="games-whoami">
+  <%= content_tag "div", id: "celebrities-data-div", data: {celebrities: @celebrities } do %>
+  <% end %>
+  <%= content_tag "div", id: "card-data-div", data: {cards: @deck.cards.card_ordered } do %>
+  <% end %>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <p>I'm thinking of a famous person</p>
+      <p>Your job is to guess who I am</p>
+      <div class="debug-celeb-name">
+
+      </div>
+    </div>
+  </div>
+
+  <div class="replay-box">
+    <div class="row">
+      <div class="col-sm-12">
+        <div id="game-over-message">
+        </div>
+        <p>Would you like to play again?</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <button id="whoami-game-start-button" type="button" class="btn btn-primary">Start Game</button>
+    </div>
+  </div>
+
+  <div class="qcard-hand">
+    <div id="guess-feedback" class="row">
+      <div class="col-sm-12">
+        <p>I'm sorry, your guess is not correct.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <p>Pick a card with a question you'd like to ask me to help you figure out who I am.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <%= render 'shared/empty_card' %>
+      </div>
+      <div class="col-sm-2">
+        <%= render 'shared/empty_card' %>
+      </div>
+      <div class="col-sm-2">
+        <%= render 'shared/empty_card' %>
+      </div>
+      <div class="col-sm-2">
+        <%= render 'shared/empty_card' %>
+      </div>
+      <div class="col-sm-2">
+        <%= render 'shared/empty_card' %>
+      </div>
+      <div class="col-sm-2">
+        <button type="button" class="btn btn-primary disabled" id="confirm-card-choice-button">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="qcard-answer-box">
+    <div class="row">
+      <div class="col-sm-12">
+        <div id="qcard-answer-question"></div>
+        <div>
+          <p id="qcard-answer-answer">
+            
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="player-guess-box">
+    <div class="row">
+      <div class="col-sm-12">
+        <p>Would you like to guess who I am? Type your guess in the box below. If you'd like to submit your guess, click "Submit Guess". If you're not yet sure who I am, click "Skip"</p>
+        <input id="player-guess" type="text">
+        <br>
+        Wikipedia Results
+        <br>
+        <div class="wiki-search-results">
+          Type a name in the search field above - if wikipedia has articles on that individual, links should appear here.
+        </div>
+        <button type="button" class="btn btn-primary" id="skip-guess-button">Skip</button>
+        <button type="button" class="btn btn-primary disabled" id="submit-guess-button">Submit Guess</button>
+      </div>
+    </div>
+  </div>
+
+</div>

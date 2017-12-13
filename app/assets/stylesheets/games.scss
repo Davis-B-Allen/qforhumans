@@ -1,0 +1,43 @@
+// Place all the styles related to the Games controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.games-whoami {
+  .qcard-hand {
+    margin-top: 20px;
+    display: none;
+  }
+  .qcard {
+    &.selected {
+      background: lightgreen;
+    }
+    cursor: pointer;
+  }
+  .qcard-answer-box {
+    margin-top: 20px;
+    background: lightblue;
+    display: none;
+  }
+  .player-guess-box {
+    margin-top: 20px;
+    background: lightblue;
+    display: none;
+    #player-guess {
+      width: 90%;
+      margin: 20px 5%;
+    }
+    .wiki-search-results {
+      width: 90%;
+      margin: 0px 5% 20px 5%;
+      background: lightgreen;
+      border: 1px solid black;
+      min-height: 50px;
+    }
+  }
+  .replay-box {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: lightblue;
+    display: none;
+  }
+}

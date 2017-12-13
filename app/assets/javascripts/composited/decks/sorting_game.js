@@ -15,20 +15,6 @@
   var roundHandSize;
 
   /**
-   * Shuffles array in place.
-   * @param {Array} a items The array containing the items.
-   */
-  function shuffle(a) {
-      var j, x, i;
-      for (i = a.length; i; i--) {
-          j = Math.floor(Math.random() * i);
-          x = a[i - 1];
-          a[i - 1] = a[j];
-          a[j] = x;
-      }
-  }
-
-  /**
    * draws x cards off a pile of cards (array of card objects) and returns them
    * if fewer than x cards remain in pile, draw and return only the cards that remain
    * @param {Array} pile array of card objects
