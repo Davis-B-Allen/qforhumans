@@ -1,4 +1,12 @@
 # Make sure to include the desired .tsv file in lib/tsv
+# The .tsv must have the following columns
+#   Face
+#   LensPrefix
+#   Topic
+#   Level
+#   Text
+#   CardBackImageUrl
+#
 # Call the task with:
 # rails replace_featured_deck[filename]
 

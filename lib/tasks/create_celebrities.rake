@@ -1,4 +1,8 @@
 # Make sure to include the desired .tsv file in lib/tsv
+# The .tsv must have the following column_names
+#   Name
+#   Wikipedia
+#
 # Call the task with:
 # rails create_celebrities[filename]
 
