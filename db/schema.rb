@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171108163046) do
+ActiveRecord::Schema.define(version: 20171214200458) do
+
+  create_table "answers", force: :cascade do |t|
+    t.text "content"
+    t.integer "level"
+    t.integer "card_id"
+    t.integer "celebrity_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_id"], name: "index_answers_on_card_id"
+    t.index ["celebrity_id"], name: "index_answers_on_celebrity_id"
+  end
 
   create_table "cards", force: :cascade do |t|
     t.string "lens_prefix"
