@@ -3,6 +3,7 @@
   var availableCards;
   var initialCelebs;
   var availableCelebs;
+  var availableAnswers;
   var currentCeleb;
   var currentCards;
   var gameIsOver = true;
@@ -17,8 +18,12 @@
     gameIsOver = false;
     // choose celeb
     chooseCeleb();
+
+
+    // NOTE: Commenting out the following as we don't want to start the round
+    // until we've fetched the cards and answers for the round, given a celeb
     // start first round
-    playRound(false);
+    // playRound(false);
   }
 
   function gameOver(playerGuessedCorrectly) {
@@ -38,7 +43,33 @@
       availableCelebs = initialCelebs.slice();
     }
     shuffle(availableCelebs);
-    currentCeleb = availableCelebs.pop();
+
+
+    // Uncomment the below for actual game
+    // currentCeleb = availableCelebs.pop();
+    // For testing with James Bond answers
+    currentCeleb = availableCelebs.find(function(card) {
+      return card.name === "James Bond";
+    });
+    // initialize available cards on the basis of this celebrity
+    var cardsEndpoint = "/celebrities/" + currentCeleb.id + "/cards";
+    // initialize available answers on the basis of this celebrity
+    var answersEndpoint = "/celebrities/" + currentCeleb.id + "/answers";
+    $.getJSON(cardsEndpoint, function(cards) {
+      console.log("Fetched Cards");
+      console.log(cards);
+      availableCards = cards;
+      $.getJSON(answersEndpoint, function(answers) {
+        console.log("Fetched Answers");
+        console.log(answers);
+        availableAnswers = answers;
+        playRound(false);
+      });
+    })
+
+
+
+
     $('.debug-celeb-name').html("<p>" + currentCeleb.name + "</p>");
   }
 
@@ -50,7 +81,7 @@
       // hide incorrect guess message
       $('#guess-feedback').hide();
     }
-    console.log(availableCards);
+    // console.log(availableCards);
     if (availableCards.length > 0) {
       updateCards();
     } else {
@@ -107,10 +138,29 @@
     var targetCard = availableCards.find(function(card) {
       return card.id === cardId;
     });
+
+    // fetch an answer with relevant cardId
+    // ALSO: if there is only one answer, remove the card from availableCards
+    var answers = availableAnswers.filter(function(el) {
+       return (el.card_id === cardId);
+    });
+    console.log(answers);
+    shuffle(answers)
+    if (answers.length <= 1) {
+      var deleteIndex = availableCards.indexOf(targetCard);
+      availableCards.splice(deleteIndex,1);
+    }
+    var currentAnswer = answers.pop();
+    var answerDeleteIndex = availableAnswers.indexOf(currentAnswer);
+    availableAnswers.splice(answerDeleteIndex,1);
+
+    console.log("remaining available answers: " + availableAnswers.length);
+    console.log("remaining available cards: " + availableCards.length);
+
     // remove card from availableCards set
     // NOTE: in future, only remove card if we are grabbing the ONLY answer belonging to that card
-    var deleteIndex = availableCards.indexOf(targetCard);
-    availableCards.splice(deleteIndex,1);
+    // var deleteIndex = availableCards.indexOf(targetCard);
+    // availableCards.splice(deleteIndex,1);
     // hide qcard hand
     $('.qcard-hand').hide();
     // show answer div
@@ -119,7 +169,11 @@
     // NOTE: placeholder answer for now, in future will pull answer text from targetCard's answers
     var placeholderAnswer = "This is a placeholder answer for a question from a question card";
     $('#qcard-answer-question').html("<p>You asked \"" + targetCard.me_question + "\":<\p>");
-    progressivelyDisplayAnswer(placeholderAnswer);
+
+    // progressivelyDisplayAnswer(placeholderAnswer);
+    console.log(currentAnswer.content);
+    progressivelyDisplayAnswer(currentAnswer.content);
+
     // show playerGuess div
     resetWikiSearchBox();
     $('.player-guess-box').show();

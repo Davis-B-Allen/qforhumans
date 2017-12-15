@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+
   get 'games/who_am_i'
 
   get  '/signup',  to: 'users#new'
@@ -7,7 +9,9 @@ Rails.application.routes.draw do
 
   get 'celebrities/random'
 
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  # TODO: think up better routing and controller solution for these has_many :through models
+  get '/celebrities/:id/answers', to: 'celebrities#answers'
+  get '/celebrities/:id/cards', to: 'celebrities#cards'
 
   # get 'decks/show'
   resources :decks, only: [:show] do
@@ -15,6 +19,8 @@ Rails.application.routes.draw do
       get :sorting_game
     end
   end
+
+  # TODO: might want to nest cards within decks
   resources :cards, only: [:show]
   get '/test', to: 'cards#test'
 
