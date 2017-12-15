@@ -10,7 +10,7 @@ require 'csv'
 
 desc "Delete current celebrities and replace with celebrities from tsv file"
 task :create_celebrities, [:source_tsv] => [:environment] do |task, args|
-  Celebrity.delete_all
+  Celebrity.destroy_all
 
   filename = args.source_tsv
   tsv_file = Rails.root.join('lib', 'tsv', filename)
