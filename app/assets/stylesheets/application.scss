@@ -1,0 +1,56 @@
+/*
+ * Note I am no longer using the default Rails stylesheet manifest approach that is commented out below.
+ *
+ * Such an approach would require putting an [asterisk][equals_sign][space character] before any require
+ * statements.
+ *
+ * Instead, I have given this application stylesheet a .scss extension and have used the sass import to
+ * include the other relevant stylesheets
+ */
+
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ * you can use
+ *    require_tree .
+ *    require name_of_or_path_to_stylesheet
+ *      or
+ *    require_self
+ */
+
+/*
+ * Note that the below is using sass' import feature to manually composite all relevant stylesheets
+ * This relies on this application stylesheet having been given the .scss extension instead of .css
+ */
+
+// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+// custom defined mixins
+@import "mixins";
+
+// cards folder
+@import "cards/cards";
+
+// decks folder
+@import "decks/show";
+@import "decks/sorting_game";
+
+@import "celebrities";
+@import "custom";
+@import "games";
+@import "static_pages";
+@import "users";
+
+// sitewide css rules
+@import "sitewide";

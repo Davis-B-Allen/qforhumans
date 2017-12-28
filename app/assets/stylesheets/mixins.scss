@@ -1,0 +1,84 @@
+/* mixins for various bootstrap screen size classes */
+
+// Example:
+// @include media-breakpoint-up(lg) { h1 { color: red; } }
+// Note: the only permissable arguments are: sm, md and lg
+@mixin media-breakpoint-up($class) {
+  // Extra small devices (phones, less than 768px)
+  // No media query since this is the default in Bootstrap
+
+  // Small devices (Tablets, 768px and up)
+  @if $class == sm {
+    @media (min-width: 768px) { @content; }
+  }
+
+  // Medium devices (desktops, 992px and up)
+  @else if $class == md {
+    @media (min-width: 992px) { @content; }
+  }
+
+  // Large devices (large desktops, 1200px and up)
+  @else if $class == lg {
+    @media (min-width: 1200px) { @content; }
+  }
+
+  @else {
+    @warn "Breakpoint mixin supports: sm, md, lg";
+  }
+}
+
+// Example:
+// @include media-breakpoint-down(xs) { h1 { color: red; } }
+// Note: the only permissable arguments are: xs, sm and md
+@mixin media-breakpoint-down($class) {
+  // Extra small devices (phones, less than 768px)
+  @if $class == xs {
+    @media (max-width: 767px) { @content; }
+  }
+
+  // small devices (tablets, less than 992px)
+  @else if $class == sm {
+    @media (max-width: 991px) { @content; }
+  }
+
+  // Medium devices (desktops, less than 1200px)
+  @else if $class == md {
+    @media (max-width: 1199px) { @content; }
+  }
+
+  // Large devices (large desktops)
+  // No media query since the Large breakpoint has no upper bound on its width
+
+  @else {
+    @warn "Breakpoint mixin supports: xs, sm, md";
+  }
+}
+
+// Example:
+// @include media-breakpoint-only(md) { h1 { color: red; } }
+// Note: the only permissable arguments are: xs, sm, md and lg
+@mixin media-breakpoint-only($class) {
+  // Extra small devices (phones, less than 768px)
+  @if $class == xs {
+    @media (max-width: 767px) { @content; }
+  }
+
+  // Small devices (tablets, 768px and up)
+  @else if $class == sm {
+    @media (min-width: 768px) and (max-width: 991px) { @content; }
+  }
+
+  // Medium devices (desktops, 992px and up)
+  @else if $class == md {
+    @media (min-width: 992px) and (max-width: 1199px) { @content; }
+  }
+
+  // Large devices (large desktops, 1200px and up)
+  @else if $class == lg {
+    @media (min-width: 1200px) { @content; }
+  }
+
+  @else {
+    @warn "Breakpoint mixin supports: xs, sm, md, lg";
+  }
+}
