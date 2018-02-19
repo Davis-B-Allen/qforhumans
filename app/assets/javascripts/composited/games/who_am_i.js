@@ -6,12 +6,13 @@
   var availableAnswers;
   var currentCeleb;
   var currentCards;
-  var gameIsOver = true;
   var wikiSearchTimer;
+  var gameIsOver = true;
+  var nameQuestionMarks = "????????";
 
   function startGame() {
     $('.replay-box').hide();
-    $('#whoami-game-start-button').hide();
+    // $('#whoami-game-start-button').hide();
     availableCards = JSON.parse($("#card-data-div")[0].dataset.cards);
     // NOTE: TO LIMIT CARD ARRAY TO SUBSET FOR TESTING, uncomment below
     // availableCards = availableCards.slice(0,7);
@@ -26,6 +27,22 @@
     // playRound(false);
   }
 
+  function revealCelebrity(name, playerGuessedCorrectly) {
+    $('#whoami-blank').html("&nbsp;");
+    var tickertapeTimer;
+    tickertapeTimer = setInterval(function() {
+      if (name.length === 0) {
+        clearInterval(tickertapeTimer);
+        gameOver(playerGuessedCorrectly);
+      } else {
+        var letter = name.slice(0,1);
+        name = name.slice(1,name.length);
+        $('#whoami-blank').append(letter);
+      }
+      console.log("tick");
+    }, 100);
+  }
+
   function gameOver(playerGuessedCorrectly) {
     // check if player guessed correctly. If they did, show you won message, else show you lost message
     if (playerGuessedCorrectly) {
@@ -35,7 +52,10 @@
     }
     gameIsOver = true;
     $('.replay-box').show();
-    $('#whoami-game-start-button').show();
+
+    $('#slots-ring').removeClass("spinning");
+    $('.spin-box').show();
+    // $('#whoami-game-start-button').show();
   }
 
   function chooseCeleb() {
@@ -85,8 +105,16 @@
     if (availableCards.length > 0) {
       updateCards();
     } else {
-      gameOver(false);
+      // gameOver(false);
+      revealCelebrity(currentCeleb.name, false);
     }
+  }
+
+  function deal(el, i) {
+    setTimeout( function() {
+      $(el).addClass("dealt");
+      $(el).removeClass("undealt");
+    }, ((i)*200) );
   }
 
   function updateCards() {
@@ -105,7 +133,20 @@
         $(card).hide();
       }
     });
-    $('.qcard-hand').show(0,'',resizeCardFont);
+    $(".qcard").removeClass("dealt");
+    $(".qcard").addClass("undealt");
+    // $('.qcard-hand').show(0,'',resizeCardFont);
+    resizeCardFont();
+    // $('.qcard-hand').slideDown(500,'',resizeCardFont);
+    $('.qcard-hand').slideDown(500, function() {
+      resizeCardFont();
+      var toDeal = $('.qcard');
+      for (var i = 0; i < toDeal.length; i++) {
+        deal(toDeal[i], i);
+      }
+      // $(".qcard").addClass("dealt");
+      // $(".qcard").removeClass("undealt");
+    });
   }
 
   function updateCardDisplay(card, cardData) {
@@ -114,8 +155,7 @@
     $(card).find('#q-card-id').attr('data-id', cardData.id);
   }
 
-  function progressivelyDisplayAnswer(answer) {
-    $('#qcard-answer-answer').html("");
+  function progressivelyDisplayAnswer(answer, paraToBeDisplayedIn) {
     var tickertapeTimer;
     tickertapeTimer = setInterval(function() {
       if (answer.length === 0) {
@@ -123,7 +163,7 @@
       } else {
         var letter = answer.slice(0,1);
         answer = answer.slice(1,answer.length);
-        $('#qcard-answer-answer').append(letter);
+        $(paraToBeDisplayedIn).append(letter);
       }
       console.log("tick");
     }, 50);
@@ -163,20 +203,31 @@
     // availableCards.splice(deleteIndex,1);
     // hide qcard hand
     $('.qcard-hand').hide();
+
+    resetWikiSearchBox();
     // show answer div
-    $('.qcard-answer-box').show();
     // display answer
     // NOTE: placeholder answer for now, in future will pull answer text from targetCard's answers
-    var placeholderAnswer = "This is a placeholder answer for a question from a question card";
-    $('#qcard-answer-question').html("<p>You asked \"" + targetCard.me_question + "\":<\p>");
 
-    // progressivelyDisplayAnswer(placeholderAnswer);
+    var interviewLog = document.getElementById("interview-log");
+    var paraQ = document.createElement("p");
+    var paraA = document.createElement("p");
+    interviewLog.prepend(paraA);
+    interviewLog.prepend(paraQ);
+    // $(paraQ).html("<p>You asked \"" + targetCard.me_question + "\"<\p>");
+    $(paraQ).append("You asked \"" + targetCard.me_question + "\"");
+    $(paraA).append("Me: ");
+
+    $('.qcard-answer-box').show();
+    // window.scrollTo(0, 0);
+    $("html, body").animate({ scrollTop: "0px" });
+
+
     console.log(currentAnswer.content);
-    progressivelyDisplayAnswer(currentAnswer.content);
+    progressivelyDisplayAnswer(currentAnswer.content, paraA);
 
     // show playerGuess div
-    resetWikiSearchBox();
-    $('.player-guess-box').show();
+    // $('.player-guess-box').show();
   }
 
   function onCardClick() {
@@ -192,13 +243,13 @@
 
   function resetWikiSearchBox() {
     $('#player-guess')[0].value = "";
-    $('.wiki-search-results').html("");
+    $('.wiki-search-results').html("Type a name in the search field above - if wikipedia has articles on that individual, links should appear here.");
     $('#submit-guess-button').addClass('disabled');
   }
 
   function onSkipGuessClick() {
     $('.qcard-answer-box').hide();
-    $('.player-guess-box').hide();
+    // $('.player-guess-box').hide();
     playRound(false);
   }
 
@@ -214,11 +265,12 @@
       return;
     }
     $('.qcard-answer-box').hide();
-    $('.player-guess-box').hide();
+    // $('.player-guess-box').hide();
     var guessIsCorrect = isGuessCorrect(playerGuess);
     // alert(guessIsCorrect);
     if (guessIsCorrect) {
-      gameOver(true);
+      // gameOver(true);
+      revealCelebrity(currentCeleb.name, true);
     } else {
       playRound(true);
     }
@@ -269,6 +321,56 @@
     }
   }
 
+  function proceedToFirstHand() {
+    var hideDelay = 1000;
+    $('.intro-box').slideUp(hideDelay);
+    $('.spin-box').slideUp(hideDelay, function() {
+      startGame();
+    });
+  }
+
+  function updateWhoAmIBlank(name) {
+    $('#whoami-blank').html("&nbsp;");
+    var tickertapeTimer;
+    tickertapeTimer = setInterval(function() {
+      if (name.length === 0) {
+        clearInterval(tickertapeTimer);
+        proceedToFirstHand();
+      } else {
+        var letter = name.slice(0,1);
+        name = name.slice(1,name.length);
+        $('#whoami-blank').append(letter);
+      }
+      console.log("tick");
+    }, 100);
+  }
+
+  function resetGame() {
+    $('.replay-box').slideUp(1000);
+    $('#interview-log').html('');
+  }
+
+  function onSpinButtonClick() {
+    resetGame();
+    $('#whoami-blank').html("&nbsp;");
+    $('#slots-ring').removeClass("spinning");
+    $('.ring-slat p').fadeOut(300, function() {
+      $('#slots-ring').addClass("spinning");
+      $('.ring-slat p').fadeIn(1000);
+    });
+  }
+
+  function onSpinAnimationEnd() {
+    // $('#whoami-blank').html(nameQuestionMarks);
+    updateWhoAmIBlank(nameQuestionMarks);
+  }
+
+  function setSlotsLabels() {
+    posters = document.getElementsByClassName("ring-slat");
+    for (var i = 0; i < posters.length; i++) {
+      posters[i].firstChild.textContent = nameQuestionMarks;
+    }
+  }
 
 
   $(document).on('turbolinks:load', function() {
@@ -281,6 +383,7 @@
     initialCelebs = JSON.parse($("#celebrities-data-div")[0].dataset.celebrities);
     availableCards = JSON.parse($("#card-data-div")[0].dataset.cards);
     availableCelebs = JSON.parse($("#celebrities-data-div")[0].dataset.celebrities);
+    setSlotsLabels();
     // window.cardInitialData2 = JSON.parse($("#card-data-div")[0].dataset.cards);
     // window.initialCelebs = JSON.parse($("#celebrities-data-div")[0].dataset.celebrities);
     // window.availableCards = JSON.parse($("#card-data-div")[0].dataset.cards);
@@ -288,12 +391,14 @@
   });
 
   $(document).ready(function() {
-    $(document).on('click', '#whoami-game-start-button', startGame);
+    // $(document).on('click', '#whoami-game-start-button', startGame);
     $(document).on('click', '#confirm-card-choice-button', onConfirmCardChoiceClick);
     $(document).on('click', '.qcard', onCardClick);
     $(document).on('click', '#skip-guess-button', onSkipGuessClick);
     $(document).on('click', '#submit-guess-button', onSubmitGuessClick);
     $(document).on('keyup', '#player-guess', onPlayerGuessKeyUp);
+    $(document).on('click', '.games-whoami #spin-button', onSpinButtonClick);
+    $(document).on('animationend webkitAnimationEnd', '.games-whoami #slots-ring', onSpinAnimationEnd);
   });
 
 }());

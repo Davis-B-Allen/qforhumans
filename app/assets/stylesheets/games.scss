@@ -3,6 +3,7 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .games-whoami {
+  min-height: 600px;
   .qcard-hand {
     margin-top: 20px;
     display: none;
@@ -12,16 +13,26 @@
       background: lightgreen;
     }
     cursor: pointer;
+    margin: 2em auto;
+    @include media-breakpoint-down(xs) {
+      width: 80%;
+    }
   }
   .qcard-answer-box {
     margin-top: 20px;
     background: lightblue;
     display: none;
+    #interview-log {
+      // max-height: 50vh;
+      // overflow: scroll;
+      min-height: 50vh;
+      background: #fcf2b9;
+      padding: 10px;
+    }
   }
   .player-guess-box {
-    margin-top: 20px;
+    margin-bottom: 20px;
     background: lightblue;
-    display: none;
     #player-guess {
       width: 90%;
       margin: 20px 5%;
@@ -42,5 +53,39 @@
   }
   .debug-celeb-name {
     display: none;
+  }
+  .intro-box {
+    text-align: center;
+  }
+  .i-am-box {
+    text-align: center;
+    #whoami-blank {
+      display: inline-block;
+      *display: inline;/* for IE7*/
+      *zoom:1;/* for IE7*/
+      min-width: 9em;
+      border-bottom: 1px solid black
+    }
+  }
+  .spin-box {
+    margin-top: 10px;
+  }
+  .undealt {
+    // left offscreen?
+    left: -150vw;
+  }
+  .dealt {
+    // left not offscreen?
+    -webkit-animation: fromleft 0.5s ease;
+    animation: fromleft 0.5s ease;
+    left: 0;
+  }
+  @-webkit-keyframes fromleft {
+    0%    { left: -150vw; }
+    100%  { left: 0; }
+  }
+  @keyframes fromleft {
+    0%    { left: -150vw; }
+    100%  { left: 0; }
   }
 }

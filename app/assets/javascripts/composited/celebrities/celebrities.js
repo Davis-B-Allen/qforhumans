@@ -32,8 +32,7 @@
 
   $(document).ready(function() {
 
-    $(document).on('click', '#spin-button', function(e) {
-      $('#slots-ring').removeClass("spinning");
+    $(document).on('click', '.celebrities-random #spin-button', function(e) {
       $('#slots-ring').removeClass("spinning");
       $('.ring-slat p').fadeOut(300, function() {
         $('#slots-ring').addClass("spinning");
