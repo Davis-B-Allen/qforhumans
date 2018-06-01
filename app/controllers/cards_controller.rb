@@ -18,4 +18,22 @@ class CardsController < ApplicationController
     # Note: Could alternatively redirect to the card show path for the random card
     render 'show'
   end
+
+  def generate
+
+  end
+
+  def generated
+    respond_to do |format|
+      format.pdf do
+        pdf = Prawn::Document.new
+        pdf.text "Hello World!"
+        pdf.text params[:q]
+        send_data pdf.render,
+          filename: "export.pdf",
+          type: 'application/pdf',
+          disposition: 'inline'
+      end
+    end
+  end
 end

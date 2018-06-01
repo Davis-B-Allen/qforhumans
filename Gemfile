@@ -35,6 +35,9 @@ gem 'carrierwave', '1.2.1'
 gem 'mini_magick', '4.8.0'
 gem 'fog-aws', '1.4.1'
 
+# PDF Generation
+gem 'prawn', '2.2.2'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
