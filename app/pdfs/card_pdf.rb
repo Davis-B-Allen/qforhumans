@@ -14,7 +14,8 @@ class CardPdf
     @black_cards = params["blackcards"]
     @card_size   = params["cardsize"]
     @page_layout = params["pagelayout"]
-    @icon = "default.png"
+    # @icon = "default.png"
+    @icon = Rails.root.join('app','assets','images','icon.png').to_s
     @one_per_page    = @page_layout == "oneperpage" ? true : false
     @rounded_corners = @card_size   == "LR"         ? true : false
     @card_geometry   = @card_size   == "S" ? get_card_geometry(2.0,2.0,@rounded_corners,@one_per_page) : get_card_geometry(2.5,3.5,@rounded_corners,@one_per_page)
@@ -68,33 +69,95 @@ class CardPdf
   	return card_geometry;
   end
 
-  def render_card_page(pdf, card_geometry, icon, statements, is_black)
+  def draw_grid(card_geometry)
 
-  	pdf.font "Helvetica", :style => :normal
-  	pdf.font_size = 14
-  	pdf.line_width(0.5);
+  	stroke do
+  		if card_geometry["rounded_corners"] == false
+  			#Draw vertical lines
+  			0.upto(card_geometry["cards_across"]) do |i|
+  				line(
+  					[card_geometry["card_width"]*i, 0],
+  					[card_geometry["card_width"]*i, card_geometry["page_height"]]
+  					)
+  			end
+
+  			#Draw horizontal lines
+  			0.upto(card_geometry["cards_high"]) do |i|
+  				line(
+  					[0,                           card_geometry["card_height"]*i],
+  					[card_geometry["page_width"], card_geometry["card_height"]*i]
+  					)
+
+  			end
+  		else
+  			0.upto(card_geometry["cards_across"]-1) do |i|
+  				0.upto(card_geometry["cards_high"]-1) do |j|
+  					#rectangle bounded by upper left corner, horizontal measured from the left, vertical measured from the bottom
+  					rounded_rectangle(
+  								[i*card_geometry["card_width"], card_geometry["card_height"]+(j*card_geometry["card_height"])],
+  								card_geometry["card_width"],
+  								card_geometry["card_height"],
+  								card_geometry["rounded_corners"]
+  								)
+  				end
+  			end
+  		end
+  	end
+  end
+
+  def box(card_geometry, index, &blck)
+  	# Determine row + column number
+  	column = index%card_geometry["cards_across"]
+  	row = card_geometry["cards_high"] - index/card_geometry["cards_across"]
+
+  	# Margin: 10pt
+  	x = card_geometry["card_width"] * column + 10
+  	y = card_geometry["card_height"] * row - 10
+
+  	bounding_box([x,y], width: card_geometry["card_width"]-20, height: card_geometry["card_height"]-10, &blck)
+  end
+
+  def draw_logos(card_geometry, icon)
+  	idx=0
+  	while idx < card_geometry["cards_across"] * card_geometry["cards_high"]
+  		box(card_geometry, idx) do
+  			logo_max_height = 15
+  			logo_max_width = card_geometry["card_width"]/2
+  			image icon, fit: [logo_max_width,logo_max_height], at: [bounds.left,bounds.bottom+25]
+  			font "Helvetica", :style => :normal
+  			text_box "Cards Against Inanity", size:8, align: :left, width:100, at: [bounds.left+20,bounds.bottom+20]
+  		end
+  		idx = idx + 1
+  	end
+  end
+
+  def render_card_page(card_geometry, icon, statements, is_black)
+
+  	font "Helvetica", :style => :normal
+  	font_size = 14
+  	line_width(0.5);
 
 
   	if(is_black)
-  		pdf.canvas do
-  			pdf.rectangle(pdf.bounds.top_left,pdf.bounds.width, pdf.bounds.height)
+  		canvas do
+  			rectangle(bounds.top_left,bounds.width, bounds.height)
   		end
 
-  		pdf.fill_and_stroke(:fill_color=>"000000", :stroke_color=>"000000") do
-  			pdf.canvas do
-  				pdf.rectangle(pdf.bounds.top_left,pdf.bounds.width, pdf.bounds.height)
+  		fill_and_stroke(:fill_color=>"000000", :stroke_color=>"000000") do
+  			canvas do
+  				rectangle(bounds.top_left,bounds.width, bounds.height)
   			end
   		end
-  		pdf.stroke_color "ffffff"
-  		pdf.fill_color "ffffff"
+  		stroke_color "ffffff"
+  		fill_color "ffffff"
   	else
-  		pdf.stroke_color "000000"
-  		pdf.fill_color "000000"
+  		stroke_color "000000"
+  		fill_color "000000"
   	end
 
-  	draw_grid(pdf, card_geometry)
+  	draw_grid(card_geometry)
   	statements.each_with_index do |line, idx|
-  		box(pdf, card_geometry, idx) do
+  		box(card_geometry, idx) do
 
   			line_parts = line.split(/\t/)
   			card_text = line_parts.shift
@@ -226,63 +289,63 @@ class CardPdf
 
 
   			# Text
-  			pdf.font "Helvetica", :style => :normal
+  			font "Helvetica", :style => :normal
 
   			if is_pick3
-  				pdf.text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55, :inline_format => true
+  				text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55, :inline_format => true
   			else
-  				pdf.text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35, :inline_format => true
+  				text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35, :inline_format => true
   			end
 
   			if not category.nil?
-  				# pdf.text_box category, size:11, align: :right, at: [pdf.bounds.right-20,pdf.bounds.bottom+20]
-  				pdf.bounding_box([pdf.bounds.right-60, pdf.bounds.bottom+20], :width => 60, :height => 20) do
-  					pdf.text category, size:8, align: :right
+  				# text_box category, size:11, align: :right, at: [bounds.right-20,bounds.bottom+20]
+  				bounding_box([bounds.right-60, bounds.bottom+20], :width => 60, :height => 20) do
+  					text category, size:8, align: :right
   				end
   			end
 
-  			# pdf.font "Helvetica", :style => :bold
+  			# font "Helvetica", :style => :bold
   			# #pick 2
   			# if is_pick2
-  			# 	pdf.text_box "PICK", size:11, align: :right, width:30, at: [pdf.bounds.right-50,pdf.bounds.bottom+20]
-  			# 	pdf.fill_and_stroke(:fill_color=>"ffffff", :stroke_color=>"ffffff") do
-  			# 		pdf.circle([pdf.bounds.right-10,pdf.bounds.bottom+15.5],7.5)
+  			# 	text_box "PICK", size:11, align: :right, width:30, at: [bounds.right-50,bounds.bottom+20]
+  			# 	fill_and_stroke(:fill_color=>"ffffff", :stroke_color=>"ffffff") do
+  			# 		circle([bounds.right-10,bounds.bottom+15.5],7.5)
   			# 	end
-  			# 	pdf.stroke_color '000000'
-  			# 	pdf.fill_color '000000'
-  			# 	pdf.text_box "2", color:"000000", size:14, width:8, align: :center, at:[pdf.bounds.right-14,pdf.bounds.bottom+21]
-  			# 	pdf.stroke_color "ffffff"
-  			# 	pdf.fill_color "ffffff"
+  			# 	stroke_color '000000'
+  			# 	fill_color '000000'
+  			# 	text_box "2", color:"000000", size:14, width:8, align: :center, at:[bounds.right-14,bounds.bottom+21]
+  			# 	stroke_color "ffffff"
+  			# 	fill_color "ffffff"
   			# end
   			#
   			# #pick 3
   			# if is_pick3
-  			# 	pdf.text_box "PICK", size:11, align: :right, width:30, at: [pdf.bounds.right-50,pdf.bounds.bottom+20]
-  			# 	pdf.fill_and_stroke(:fill_color=>"ffffff", :stroke_color=>"ffffff") do
-  			# 		pdf.circle([pdf.bounds.right-10,pdf.bounds.bottom+15.5],7.5)
+  			# 	text_box "PICK", size:11, align: :right, width:30, at: [bounds.right-50,bounds.bottom+20]
+  			# 	fill_and_stroke(:fill_color=>"ffffff", :stroke_color=>"ffffff") do
+  			# 		circle([bounds.right-10,bounds.bottom+15.5],7.5)
   			# 	end
-  			# 	pdf.stroke_color '000000'
-  			# 	pdf.fill_color '000000'
-  			# 	pdf.text_box "3", color:"000000", size:14, width:8, align: :center, at:[pdf.bounds.right-14,pdf.bounds.bottom+21]
-  			# 	pdf.stroke_color "ffffff"
-  			# 	pdf.fill_color "ffffff"
+  			# 	stroke_color '000000'
+  			# 	fill_color '000000'
+  			# 	text_box "3", color:"000000", size:14, width:8, align: :center, at:[bounds.right-14,bounds.bottom+21]
+  			# 	stroke_color "ffffff"
+  			# 	fill_color "ffffff"
   			#
   			#
-  			# 	pdf.text_box "DRAW", size:11, align: :right, width:35, at: [pdf.bounds.right-55,pdf.bounds.bottom+40]
-  			# 	pdf.fill_and_stroke(:fill_color=>"ffffff", :stroke_color=>"ffffff") do
-  			# 		pdf.circle([pdf.bounds.right-10,pdf.bounds.bottom+35.5],7.5)
+  			# 	text_box "DRAW", size:11, align: :right, width:35, at: [bounds.right-55,bounds.bottom+40]
+  			# 	fill_and_stroke(:fill_color=>"ffffff", :stroke_color=>"ffffff") do
+  			# 		circle([bounds.right-10,bounds.bottom+35.5],7.5)
   			# 	end
-  			# 	pdf.stroke_color '000000'
-  			# 	pdf.fill_color '000000'
-  			# 	pdf.text_box "2", color:"000000", size:14, width:8, align: :center, at:[pdf.bounds.right-14,pdf.bounds.bottom+41]
-  			# 	pdf.stroke_color "ffffff"
-  			# 	pdf.fill_color "ffffff"
+  			# 	stroke_color '000000'
+  			# 	fill_color '000000'
+  			# 	text_box "2", color:"000000", size:14, width:8, align: :center, at:[bounds.right-14,bounds.bottom+41]
+  			# 	stroke_color "ffffff"
+  			# 	fill_color "ffffff"
   			# end
   		end
   	end
-  	draw_logos(pdf, card_geometry, icon)
-  	pdf.stroke_color "000000"
-  	pdf.fill_color "000000"
+  	draw_logos(card_geometry, icon)
+  	stroke_color "000000"
+  	fill_color "000000"
 
   end
 
@@ -395,17 +458,17 @@ class CardPdf
 
 		load_ttf_fonts("/usr/share/fonts/truetype/msttcorefonts", font_families)
 
-    text white_string
+    # text white_string
 
-		# white_pages.each_with_index do |statements, page|
-		# 	render_card_page(@my_prawn_doc, card_geometry, icon_file, statements, false)
-		# 	@my_prawn_doc.start_new_page unless page >= white_pages.length-1
-		# end
-		# @my_prawn_doc.start_new_page unless white_pages.length == 0 || black_pages.length == 0
-		# black_pages.each_with_index do |statements, page|
-		# 	render_card_page(@my_prawn_doc, card_geometry, icon_file, statements, true)
-		# 	@my_prawn_doc.start_new_page unless page >= black_pages.length-1
-		# end
+		white_pages.each_with_index do |statements, page|
+			render_card_page(card_geometry, icon_file, statements, false)
+			start_new_page unless page >= white_pages.length-1
+		end
+		start_new_page unless white_pages.length == 0 || black_pages.length == 0
+		black_pages.each_with_index do |statements, page|
+			render_card_page(card_geometry, icon_file, statements, true)
+			start_new_page unless page >= black_pages.length-1
+		end
   end
 
   def content(params)

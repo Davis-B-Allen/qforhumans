@@ -1,0 +1,32 @@
+<%= form_tag("/cards/generator.pdf", method: "get") do %>
+  <%= label_tag(:whitecards, "White cards:") %>
+  <%= text_area_tag(:whitecards, "Put your white cards here", class: "whiteta") %>
+  <%= label_tag(:blackcards, "Black cards:") %>
+  <%= text_area_tag(:blackcards, "Put your black cards here", class: "blackta") %>
+
+  CARD SIZE
+  <%= radio_button_tag(:cardsize, "S", checked: "true") %> Small (2"x2")
+  <%= radio_button_tag(:cardsize, "L") %> Large (2.5"x3.5")
+  <%= radio_button_tag(:cardsize, "LR") %> Large w/Round Corners (2.5"x3.5")
+
+  <br>
+  <br>
+  <br>
+
+  PAGE LAYOUT
+  <%= radio_button_tag :pagelayout, "tiled", checked: "true" %> Tiled On 8.5"x11" Sheets
+  <%= radio_button_tag :pagelayout, "oneperpage" %> One Card Per Page
+
+  <br>
+  <br>
+  <br>
+
+  ICON
+  <%= radio_button_tag :icon, "default", checked: "true" %> Default
+
+  <br>
+  <br>
+  <br>
+
+  <%= submit_tag("Generate Cards") %>
+<% end %>

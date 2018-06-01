@@ -19,6 +19,22 @@ class CardsController < ApplicationController
     render 'show'
   end
 
+  def generator
+    respond_to do |format|
+      format.html
+      format.pdf do
+        # debugger
+        whitecards = params[:whitecards]
+        blackcards = params[:blackcards]
+        pdf = CardPdf.new(params, whitecards, blackcards)
+        send_data pdf.render,
+          filename: "export.pdf",
+          type: 'application/pdf',
+          disposition: 'inline'
+      end
+    end
+  end
+
   def generate
 
   end
