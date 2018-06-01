@@ -26,9 +26,10 @@ class CardsController < ApplicationController
   def generated
     respond_to do |format|
       format.pdf do
-        pdf = Prawn::Document.new
-        pdf.text "Hello World!"
-        pdf.text params[:q]
+        # debugger
+        whitecards = params[:whitecards]
+        blackcards = params[:blackcards]
+        pdf = CardPdf.new(params, whitecards, blackcards)
         send_data pdf.render,
           filename: "export.pdf",
           type: 'application/pdf',
