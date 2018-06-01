@@ -4,4 +4,10 @@ class GamesController < ApplicationController
     @celebrities = Celebrity.all
     @card = Card.first
   end
+
+  def teletype
+    @deck = Deck.featured
+    @celebrities = Celebrity.all
+    @card = Card.first
+  end
 end

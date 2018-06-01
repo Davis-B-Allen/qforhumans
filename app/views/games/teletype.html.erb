@@ -1,0 +1,30 @@
+<div class="games-teletype">
+
+  <%= content_tag "div", id: "celebrities-data-div", data: {celebrities: @celebrities } do %>
+  <% end %>
+  <%= content_tag "div", id: "card-data-div", data: {cards: @deck.cards.card_ordered } do %>
+  <% end %>
+  <%= audio_tag "typewriter-key-1.mp3", id: "typewriter-audio" %>
+
+    <div class="teletype-input">
+      <span class="start-game-button-span">
+        <button id="start-game-button" class="btn btn-primary">Start Game</button>
+      </span>
+      <span class="question-choice-buttons">
+        <button id="q1-button" class="btn btn-primary tt-q-button" type="submit">1</button>
+        <button id="q2-button" class="btn btn-primary tt-q-button" type="submit">2</button>
+        <button id="q3-button" class="btn btn-primary tt-q-button" type="submit">3</button>
+      </span>
+    </div>
+
+  <div class="main">
+    <div class="row">
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="teletype-printout" id="teletype-screen"></div>
+      </div>
+    </div>
+  </div>
+
+</div>

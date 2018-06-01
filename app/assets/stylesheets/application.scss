@@ -39,12 +39,18 @@
 // custom defined mixins
 @import "mixins";
 
+// custom fonts
+@import "fonts";
+
 // cards folder
 @import "cards/cards";
 
 // decks folder
 @import "decks/show";
 @import "decks/sorting_game";
+
+// games folder
+@import "games/teletype";
 
 @import "celebrities";
 @import "custom";
