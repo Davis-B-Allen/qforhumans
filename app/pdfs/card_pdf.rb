@@ -284,17 +284,21 @@ class CardPdf
   			statements[idx] = [card_text,picknum]
 
   			#by default cards should be bold
-  			card_text = "<b>" + card_text + "</b>"
+  			# card_text = "<b>" + card_text + "</b>"
 
 
 
   			# Text
-  			font "Helvetica", :style => :normal
+  			# font "Helvetica", :style => :normal
+        font "Helvetica", :style => :bold
+        # font "segoe"
 
   			if is_pick3
-  				text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55, :inline_format => true
+  				# text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55, :inline_format => true
+          text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55
   			else
-  				text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35, :inline_format => true
+  				# text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35, :inline_format => true
+          text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35
   			end
 
   			if not category.nil?
@@ -456,9 +460,16 @@ class CardPdf
 		white_pages = load_pages_from_string(white_string, card_geometry)
 		black_pages = load_pages_from_string(black_string, card_geometry)
 
-		load_ttf_fonts("/usr/share/fonts/truetype/msttcorefonts", font_families)
+		# load_ttf_fonts("/usr/share/fonts/truetype/msttcorefonts", font_families)
+		# font_path = Rails.root.join('app','assets','fonts','NotoSans-Regular.ttf').to_s
+    # puts font_path
+    # font_families.update(
+    #   "segoe" => {
+    #     :normal => font_path
+    #   }
+    # )
 
-    # text white_string
+
 
 		white_pages.each_with_index do |statements, page|
 			render_card_page(card_geometry, icon_file, statements, false)

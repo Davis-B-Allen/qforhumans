@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'cards/generate'
   get 'cards/generated'
   get 'cards/generator'
+  post 'cards/generator'
 
   get  '/signup',  to: 'users#new'
   post '/signup',  to: 'users#create'
