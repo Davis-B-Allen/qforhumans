@@ -1,28 +1,37 @@
+<br>
 <%= form_tag("/cards/generator.pdf", multipart: true) do %>
-  <%= label_tag(:whitecards, "White cards:") %>
-  <%= text_area_tag(:whitecards, "Put your white cards here", class: "whiteta") %>
-  <%= label_tag(:blackcards, "Black cards:") %>
-  <%= text_area_tag(:blackcards, "Put your black cards here", class: "blackta") %>
-
-  CARD SIZE
-  <%= radio_button_tag(:cardsize, "S", checked: "true") %> Small (2"x2")
-  <%= radio_button_tag(:cardsize, "L") %> Large (2.5"x3.5")
-  <%= radio_button_tag(:cardsize, "LR") %> Large w/Round Corners (2.5"x3.5")
+  <%= label_tag(:whitecards, "CARDS:") %>
+  <%= text_area_tag(:whitecards, "Put your cards here\n\nEach card on a new line", class: "whiteta", size: "25x10") %>
+  <%= label_tag(:background_color, "Background Color:") %>
+  <%= text_field_tag :background_color, nil, maxlength: 6, placeholder: 'ffffff' %>
+  <%= label_tag(:text_color, "Text Color:") %>
+  <%= text_field_tag :text_color, nil, maxlength: 6, placeholder: '000000' %>
 
   <br>
   <br>
+  <b>Card Size:</b>
+  <br>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag(:cardsize, "S", checked: "true") %> Small (2"x2")
+  <% end %>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag(:cardsize, "L") %> Large (2.5"x3.5")
+  <% end %>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag(:cardsize, "LR") %> Large w/Round Corners (2.5"x3.5")
+  <% end %>
+
+  <br>
   <br>
 
-  PAGE LAYOUT
-  <%= radio_button_tag :pagelayout, "tiled", checked: "true" %> Tiled On 8.5"x11" Sheets
-  <%= radio_button_tag :pagelayout, "oneperpage" %> One Card Per Page
-
+  <b>Page Layout:</b>
   <br>
-  <br>
-  <br>
-
-  ICON
-  <%= radio_button_tag :icon, "default", checked: "true" %> Default
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag :pagelayout, "tiled", checked: "true" %> Tiled On 8.5"x11" Sheets
+  <% end %>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag :pagelayout, "oneperpage" %> One Card Per Page
+  <% end %>
 
   <br>
   <br>

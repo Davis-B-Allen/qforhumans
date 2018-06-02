@@ -23,10 +23,14 @@ class CardsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        # debugger
-        whitecards = params[:whitecards]
-        blackcards = params[:blackcards]
-        pdf = CardPdf.new(params, whitecards, blackcards)
+        white_cards = params["whitecards"]
+        card_size   = params["cardsize"]
+        page_layout = params["pagelayout"]
+        background_color = params["background_color"]
+        text_color = params["text_color"]
+        background_color = "ffffff" unless background_color.length == 6 and !background_color[/\H/]
+        text_color = "000000" unless text_color.length == 6 and !text_color[/\H/]
+        pdf = CardPdf.new(white_cards, card_size, page_layout, background_color, text_color)
         send_data pdf.render,
           filename: "export.pdf",
           type: 'application/pdf',

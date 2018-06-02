@@ -8,19 +8,19 @@ class CardPdf
   PAPER_HEIGHT = (MM_PER_INCH*11.0).mm;
   PAPER_WIDTH  = (MM_PER_INCH*8.5).mm;
 
-  def initialize(params, whitecards, blackcards)
-    # content(whitecards, blackcards)
-    @white_cards = params["whitecards"]
-    @black_cards = params["blackcards"]
-    @card_size   = params["cardsize"]
-    @page_layout = params["pagelayout"]
+  def initialize(white_cards, card_size, page_layout, background_color, text_color)
+    @white_cards = white_cards
+    @card_size   = card_size
+    @page_layout = page_layout
+    @background_color = background_color
+    @text_color = text_color
     # @icon = "default.png"
     @icon = Rails.root.join('app','assets','images','icon.png').to_s
     @one_per_page    = @page_layout == "oneperpage" ? true : false
     @rounded_corners = @card_size   == "LR"         ? true : false
     @card_geometry   = @card_size   == "S" ? get_card_geometry(2.0,2.0,@rounded_corners,@one_per_page) : get_card_geometry(2.5,3.5,@rounded_corners,@one_per_page)
 
-    content(params)
+    content()
   end
 
   def document
@@ -33,12 +33,6 @@ class CardPdf
         info: { :Title => "Cards Against Inanity", :CreationDate => Time.now, :Producer => "Cards Against Inanity", :Creator=>"Cards Against Inanity" }
     )
   end
-
-  # def content(whitecards, blackcards)
-  #   text "Cards"
-  #   text whitecards
-  #   text blackcards
-  # end
 
   def get_card_geometry(card_width_inches=2.0, card_height_inches=2.0, rounded_corners=false, one_card_per_page=false)
   	card_geometry = Hash.new
@@ -131,29 +125,19 @@ class CardPdf
   	end
   end
 
-  def render_card_page(card_geometry, icon, statements, is_black)
-
+  def render_card_page(card_geometry, icon, statements, background_color, text_color)
   	font "Helvetica", :style => :normal
   	font_size = 14
   	line_width(0.5);
 
-
-  	if(is_black)
-  		canvas do
-  			rectangle(bounds.top_left,bounds.width, bounds.height)
-  		end
-
-  		fill_and_stroke(:fill_color=>"000000", :stroke_color=>"000000") do
-  			canvas do
-  				rectangle(bounds.top_left,bounds.width, bounds.height)
-  			end
-  		end
-  		stroke_color "ffffff"
-  		fill_color "ffffff"
-  	else
-  		stroke_color "000000"
-  		fill_color "000000"
-  	end
+    canvas do
+      rectangle(bounds.top_left,bounds.width, bounds.height)
+    end
+    stroke_color background_color
+    fill_color background_color
+    fill { rectangle(bounds.top_left,bounds.width, bounds.height) }
+    stroke_color text_color
+    fill_color text_color
 
   	draw_grid(card_geometry)
   	statements.each_with_index do |line, idx|
@@ -185,9 +169,7 @@ class CardPdf
   			card_text = card_text.gsub("</font>", "[[[/font]]]")
   			card_text = card_text.gsub("</color>", "[[[/color]]]")
 
-
   			card_text = card_text.gsub(/</, "&lt;");
-
 
   			card_text = card_text.gsub("\[\[\[b\]\]\]", "<b>")
   			card_text = card_text.gsub("\[\[\[i\]\]\]", "<i>")
@@ -208,7 +190,6 @@ class CardPdf
   			card_text = card_text.gsub("\[\[\[/font\]\]\]", "</font>")
   			card_text = card_text.gsub("\[\[\[/color\]\]\]", "</color>")
 
-
   			# Check for category to include
   			# surrounded by $$ - e.g. $$Category$$
   			category = card_text.scan(/\$\$([^\$]*)\$\$/).last
@@ -216,8 +197,6 @@ class CardPdf
   			  category = category.first
   			end
   			card_text = card_text.gsub(/\$\$([^\$]*)\$\$/, "").strip
-
-
 
   			parts = card_text.split(/\[\[/)
   			card_text = ""
@@ -249,36 +228,14 @@ class CardPdf
   			card_text = card_text.gsub(/^[\t ]*/, "")
   			card_text = card_text.gsub(/[\t ]*$/, "")
 
-
-
   			is_pick2 = false
   			is_pick3 = false
-  			if is_black
-  				pick_num = line_parts.shift
-  				if pick_num.nil? or pick_num == ""
-  					tmpline = "a" + card_text.to_s + "a"
-  					parts = tmpline.split(/__+/)
-  					if parts.length == 3
-  						is_pick2 = true
-  					elsif parts.length >= 4
-  						is_pick3 = true
-  					end
-  				elsif pick_num == "2"
-  					is_pick2 = true
-  				elsif pick_num == "3"
-  					is_pick3 = true
-  				end
-
-  			end
-
 
   			picknum = "0"
   			if is_pick2
   				picknum = "2"
   			elsif is_pick3
   				picknum = "3"
-  			elsif is_black
-  				picknum = "1"
   			end
 
   			statements[idx] = [card_text,picknum]
@@ -286,9 +243,6 @@ class CardPdf
   			#by default cards should be bold
   			# card_text = "<b>" + card_text + "</b>"
 
-
-
-  			# Text
   			# font "Helvetica", :style => :normal
         font "Helvetica", :style => :bold
         # font "segoe"
@@ -302,115 +256,15 @@ class CardPdf
   			end
 
   			if not category.nil?
-  				# text_box category, size:11, align: :right, at: [bounds.right-20,bounds.bottom+20]
   				bounding_box([bounds.right-60, bounds.bottom+20], :width => 60, :height => 20) do
   					text category, size:8, align: :right
   				end
   			end
-
-  			# font "Helvetica", :style => :bold
-  			# #pick 2
-  			# if is_pick2
-  			# 	text_box "PICK", size:11, align: :right, width:30, at: [bounds.right-50,bounds.bottom+20]
-  			# 	fill_and_stroke(:fill_color=>"ffffff", :stroke_color=>"ffffff") do
-  			# 		circle([bounds.right-10,bounds.bottom+15.5],7.5)
-  			# 	end
-  			# 	stroke_color '000000'
-  			# 	fill_color '000000'
-  			# 	text_box "2", color:"000000", size:14, width:8, align: :center, at:[bounds.right-14,bounds.bottom+21]
-  			# 	stroke_color "ffffff"
-  			# 	fill_color "ffffff"
-  			# end
-  			#
-  			# #pick 3
-  			# if is_pick3
-  			# 	text_box "PICK", size:11, align: :right, width:30, at: [bounds.right-50,bounds.bottom+20]
-  			# 	fill_and_stroke(:fill_color=>"ffffff", :stroke_color=>"ffffff") do
-  			# 		circle([bounds.right-10,bounds.bottom+15.5],7.5)
-  			# 	end
-  			# 	stroke_color '000000'
-  			# 	fill_color '000000'
-  			# 	text_box "3", color:"000000", size:14, width:8, align: :center, at:[bounds.right-14,bounds.bottom+21]
-  			# 	stroke_color "ffffff"
-  			# 	fill_color "ffffff"
-  			#
-  			#
-  			# 	text_box "DRAW", size:11, align: :right, width:35, at: [bounds.right-55,bounds.bottom+40]
-  			# 	fill_and_stroke(:fill_color=>"ffffff", :stroke_color=>"ffffff") do
-  			# 		circle([bounds.right-10,bounds.bottom+35.5],7.5)
-  			# 	end
-  			# 	stroke_color '000000'
-  			# 	fill_color '000000'
-  			# 	text_box "2", color:"000000", size:14, width:8, align: :center, at:[bounds.right-14,bounds.bottom+41]
-  			# 	stroke_color "ffffff"
-  			# 	fill_color "ffffff"
-  			# end
   		end
   	end
   	draw_logos(card_geometry, icon)
   	stroke_color "000000"
   	fill_color "000000"
-
-  end
-
-  def load_ttf_fonts(font_dir, font_families)
-
-  	if font_dir.nil?
-  		return
-  	elsif (not Dir.exist?(font_dir)) or (font_families.nil?)
-  		return
-  	end
-
-  	font_files = Hash.new
-  	ttf_files=Dir.glob(font_dir + "/*.ttf")
-  	ttf_files.each do |ttf|
-  		full_name = ttf.gsub(/^.*\//, "")
-  		full_name = full_name.gsub(/\.ttf$/, "")
-  		style = "normal"
-  		name = full_name
-  		if name.match(/_Bold_Italic$/)
-  			style = "bold_italic"
-  			name = name.gsub(/_Bold_Italic$/, "")
-  		elsif name.match(/_Italic$/)
-  			style = "italic"
-  			name = name.gsub(/_Italic$/, "")
-  		elsif name.match(/_Bold$/)
-  			style = "bold"
-  			name = name.gsub(/_Bold$/, "")
-  		end
-
-  		name = name.gsub(/_/, " ");
-
-  		if not (font_files.has_key? name)
-  			font_files[name] = Hash.new
-  		end
-  		font_files[name][style] = ttf
-  	end
-
-  	font_files.each_pair do |name, ttf_files|
-  		if (ttf_files.has_key? "normal" ) and (not font_families.has_key? "name" )
-  			normal = ttf_files["normal"]
-  			italic = (ttf_files.has_key? "italic") ?  ttf_files["italic"] : normal
-  			bold   = (ttf_files.has_key? "bold"  ) ?  ttf_files["bold"]   : normal
-  			bold_italic = normal
-  			if ttf_files.has_key? 'bold_italic'
-  				bold_italic = ttf_files["bold_italic"]
-  			elsif ttf_files.has_key? 'italic'
-  				bold_italic = italic
-  			elsif ttf_files.has_key? 'bold'
-  				bold_italic = bold
-  			end
-
-
-  			font_families.update(name => {
-  				:normal => normal,
-  				:italic => italic,
-  				:bold => bold,
-  				:bold_italic => bold_italic
-  			})
-
-  		end
-  	end
   end
 
   def load_pages_from_lines(lines, card_geometry)
@@ -426,16 +280,14 @@ class CardPdf
   	end
   	lines = non_empty_lines
 
-
   	cards_per_page = card_geometry["cards_high"] * card_geometry["cards_across"]
   	num_pages = (lines.length.to_f/cards_per_page.to_f).ceil
 
   	0.upto(num_pages - 1) do |pn|
    		pages << lines[pn*cards_per_page,cards_per_page]
-      	end
+    end
 
   	return pages
-
   end
 
   def load_pages_from_string(string, card_geometry)
@@ -445,22 +297,14 @@ class CardPdf
   end
 
   # render_cards nil, nil, nil, icon, "cards.pdf", true, false, false, card_geometry, white_cards, black_cards, true
-  def render_cards(directory=".", white_file="white.txt", black_file="black.txt", icon_file="icon.png", output_file="cards.pdf", input_files_are_absolute=false, output_file_name_from_directory=true, recurse=true, card_geometry=get_card_geometry, white_string="", black_string="", output_to_stdout=false, title=nil )
-
-  	# if not File.exist? icon_file
-  	# 	icon_file = "./default.png"
-  	# end
+  def render_cards(icon_file="icon.png", card_geometry=get_card_geometry, white_string="", background_color = "ffffff", text_color = "000000")
 
   	white_pages = []
-  	black_pages = []
-  	if white_file == nil and black_file == nil and white_string == "" and black_string == ""
+  	if white_string == ""
   		white_string = " "
-  		black_string = " "
   	end
 		white_pages = load_pages_from_string(white_string, card_geometry)
-		black_pages = load_pages_from_string(black_string, card_geometry)
 
-		# load_ttf_fonts("/usr/share/fonts/truetype/msttcorefonts", font_families)
 		# font_path = Rails.root.join('app','assets','fonts','NotoSans-Regular.ttf').to_s
     # puts font_path
     # font_families.update(
@@ -469,28 +313,14 @@ class CardPdf
     #   }
     # )
 
-
-
 		white_pages.each_with_index do |statements, page|
-			render_card_page(card_geometry, icon_file, statements, false)
+			render_card_page(card_geometry, icon_file, statements, background_color, text_color)
 			start_new_page unless page >= white_pages.length-1
-		end
-		start_new_page unless white_pages.length == 0 || black_pages.length == 0
-		black_pages.each_with_index do |statements, page|
-			render_card_page(card_geometry, icon_file, statements, true)
-			start_new_page unless page >= black_pages.length-1
 		end
   end
 
-  def content(params)
-
-    # text @white_cards
-    # text @black_cards
-    # text @icon
-    # text @one_per_page.to_s
-    # text @rounded_corners.to_s
-
-    render_cards nil, nil, nil, @icon, "cards.pdf", true, false, false, @card_geometry, @white_cards, @black_cards, true
+  def content()
+    render_cards @icon, @card_geometry, @white_cards, @background_color, @text_color
   end
 
 end
