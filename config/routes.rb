@@ -4,10 +4,9 @@ Rails.application.routes.draw do
   get 'games/who_am_i'
   get 'games/teletype'
 
-  get 'cards/generate'
-  get 'cards/generated'
   get 'cards/generator'
-  post 'cards/generator'
+  post 'cards/generated'
+  get 'cards/generated', to: redirect('cards/generator')
 
   get  '/signup',  to: 'users#new'
   post '/signup',  to: 'users#create'

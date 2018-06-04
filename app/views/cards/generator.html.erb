@@ -1,5 +1,5 @@
 <br>
-<%= form_tag("/cards/generator.pdf", multipart: true) do %>
+<%= form_tag("/cards/generated.pdf", multipart: true) do %>
   <%= label_tag(:whitecards, "CARDS:") %>
   <%= text_area_tag(:whitecards, "Put your cards here\n\nEach card on a new line", class: "whiteta", size: "25x10") %>
   <%= label_tag(:background_color, "Background Color:") %>

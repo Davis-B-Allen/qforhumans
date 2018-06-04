@@ -241,18 +241,23 @@ class CardPdf
   			statements[idx] = [card_text,picknum]
 
   			#by default cards should be bold
-  			# card_text = "<b>" + card_text + "</b>"
+  			card_text = "<b>" + card_text + "</b>"
 
-  			# font "Helvetica", :style => :normal
-        font "Helvetica", :style => :bold
+        # font "Helvetica", :style => :bold
+        font "Helvetica", :style => :normal
+        # font "noto", :style => :normal
         # font "segoe"
 
   			if is_pick3
-  				# text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55, :inline_format => true
-          text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55
+          # text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55, :inline_format => true
+          # text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55
+  				text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55, :fallback_fonts => ["noto"], :inline_format => true
+          # text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-55, :fallback_fonts => ["noto"]
   			else
-  				# text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35, :inline_format => true
-          text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35
+          # text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35, :inline_format => true
+          # text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35
+  				text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35, :fallback_fonts => ["noto"], :inline_format => true
+          # text_box card_text.to_s, :overflow => :shrink_to_fit, :height =>card_geometry["card_height"]-35, :fallback_fonts => ["noto"]
   			end
 
   			if not category.nil?
@@ -305,13 +310,21 @@ class CardPdf
   	end
 		white_pages = load_pages_from_string(white_string, card_geometry)
 
-		# font_path = Rails.root.join('app','assets','fonts','NotoSans-Regular.ttf').to_s
-    # puts font_path
-    # font_families.update(
-    #   "segoe" => {
-    #     :normal => font_path
-    #   }
-    # )
+    font_families.update(
+      "segoe" => {
+        :normal => Rails.root.join('app','assets','fonts','SEGOEPR.TTF').to_s,
+        :bold => Rails.root.join('app','assets','fonts','SEGOEPRB.TTF').to_s
+      }
+    )
+
+    font_families.update(
+      "noto" => {
+        :normal => Rails.root.join('app','assets','fonts','NotoSans-Regular.ttf').to_s,
+        :italic => Rails.root.join('app','assets','fonts','NotoSans-Italic.ttf').to_s,
+        :bold => Rails.root.join('app','assets','fonts','NotoSans-Bold.ttf').to_s,
+        :bold_italic => Rails.root.join('app','assets','fonts','NotoSans-BoldItalic.ttf').to_s,
+      }
+    )
 
 		white_pages.each_with_index do |statements, page|
 			render_card_page(card_geometry, icon_file, statements, background_color, text_color)
