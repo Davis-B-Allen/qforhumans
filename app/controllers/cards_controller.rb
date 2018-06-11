@@ -1,8 +1,5 @@
 class CardsController < ApplicationController
 
-  require "mini_magick"
-  require 'zip'
-
   def test
     @card = Card.order("RANDOM()").first
     render layout: false
