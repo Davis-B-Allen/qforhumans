@@ -38,6 +38,9 @@ gem 'fog-aws', '1.4.1'
 # PDF Generation
 gem 'prawn', '2.2.2'
 
+# Zip
+gem 'rubyzip', '~> 1.0'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
