@@ -35,7 +35,23 @@
 
   <br>
   <br>
+
+  <b>DPI:</b>
+  <br>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag :dpi, "300", checked: "true" %> 300
+  <% end %>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag :dpi, "600" %> 600
+  <% end %>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag :dpi, "1200" %> 1200
+  <% end %>
+
+  <br>
+  <br>
   <br>
 
   <%= submit_tag("Generate Cards") %>
+  <%= submit_tag "Generate PNG", formaction: "/cards/generated" %>
 <% end %>

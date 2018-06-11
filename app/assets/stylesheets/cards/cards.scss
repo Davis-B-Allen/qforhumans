@@ -136,8 +136,13 @@
       }
     }
     .q-card-content-middle {
-      height: 63%;
+      height: 100%;
       padding: 0% 10%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       font-size: 1.8em;
       text-align: center;
       font-family: segoe;

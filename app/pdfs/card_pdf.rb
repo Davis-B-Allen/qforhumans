@@ -8,6 +8,12 @@ class CardPdf
   PAPER_HEIGHT = (MM_PER_INCH*11.0).mm;
   PAPER_WIDTH  = (MM_PER_INCH*8.5).mm;
 
+  LETTER_HEIGHT = (MM_PER_INCH*11.0).mm;
+  LETTER_WIDTH  = (MM_PER_INCH*8.5).mm;
+
+  A4_HEIGHT = (297.0).mm;
+  A4_WIDTH  = (210.0).mm;
+
   def initialize(white_cards, card_size, page_layout, background_color, text_color)
     @white_cards = white_cards
     @card_size   = card_size

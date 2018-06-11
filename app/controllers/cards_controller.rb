@@ -1,5 +1,8 @@
 class CardsController < ApplicationController
 
+  require "mini_magick"
+  require 'zip'
+
   def test
     @card = Card.order("RANDOM()").first
     render layout: false
@@ -23,16 +26,25 @@ class CardsController < ApplicationController
   end
 
   def generated
+    white_cards = params["whitecards"]
+    card_size   = params["cardsize"]
+    page_layout = params["pagelayout"]
+    dpi = params["dpi"].to_i
+    background_color = params["background_color"]
+    text_color = params["text_color"]
+    background_color = "ffffff" unless background_color.length == 6 and !background_color[/\H/]
+    text_color = "000000" unless text_color.length == 6 and !text_color[/\H/]
+    pdf = CardPdf.new(white_cards, card_size, page_layout, background_color, text_color)
+    PdfConverter.foo
     respond_to do |format|
+      format.html do
+        pdf_file = Rails.root.join('tmp/cards.pdf')
+        pdf.render_file pdf_file
+        zipfile_name = PdfConverter.create_images pdf_file, dpi
+        File.delete(pdf_file) if File.exist?(pdf_file)
+        send_file zipfile_name
+      end
       format.pdf do
-        white_cards = params["whitecards"]
-        card_size   = params["cardsize"]
-        page_layout = params["pagelayout"]
-        background_color = params["background_color"]
-        text_color = params["text_color"]
-        background_color = "ffffff" unless background_color.length == 6 and !background_color[/\H/]
-        text_color = "000000" unless text_color.length == 6 and !text_color[/\H/]
-        pdf = CardPdf.new(white_cards, card_size, page_layout, background_color, text_color)
         send_data pdf.render,
           filename: "export.pdf",
           type: 'application/pdf',
