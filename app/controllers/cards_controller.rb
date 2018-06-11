@@ -32,7 +32,6 @@ class CardsController < ApplicationController
     background_color = "ffffff" unless background_color.length == 6 and !background_color[/\H/]
     text_color = "000000" unless text_color.length == 6 and !text_color[/\H/]
     pdf = CardPdf.new(white_cards, card_size, page_layout, background_color, text_color)
-    PdfConverter.foo
     respond_to do |format|
       format.html do
         pdf_file = Rails.root.join('tmp/cards.pdf')

@@ -1,8 +1,6 @@
 class PdfConverter
 
-  def self.foo
-    puts "foo"
-  end
+  require 'zip'
 
   def self.create_images(path_to_pdf, dpi)
     pdf = MiniMagick::Image.open(path_to_pdf)
