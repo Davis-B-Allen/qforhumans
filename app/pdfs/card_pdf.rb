@@ -8,18 +8,21 @@ class CardPdf
   PAPER_HEIGHT = (MM_PER_INCH*11.0).mm;
   PAPER_WIDTH  = (MM_PER_INCH*8.5).mm;
 
+  BLEED_MARGIN = (MM_PER_INCH*0.25).mm
+
   LETTER_HEIGHT = (MM_PER_INCH*11.0).mm;
   LETTER_WIDTH  = (MM_PER_INCH*8.5).mm;
 
   A4_HEIGHT = (297.0).mm;
   A4_WIDTH  = (210.0).mm;
 
-  def initialize(white_cards, card_size, page_layout, background_color, text_color)
+  def initialize(white_cards, card_size, page_layout, background_color, text_color, bleed)
     @white_cards = white_cards
     @card_size   = card_size
     @page_layout = page_layout
     @background_color = background_color
     @text_color = text_color
+    @bleed = (bleed == "true")
     # @icon = "default.png"
     @icon = Rails.root.join('app','assets','images','icon.png').to_s
     @one_per_page    = @page_layout == "oneperpage" ? true : false
@@ -49,8 +52,8 @@ class CardPdf
   	card_geometry["one_card_per_page"] = one_card_per_page
 
   	if card_geometry["one_card_per_page"]
-  		card_geometry["paper_width"]       = card_geometry["card_width"]
-  		card_geometry["paper_height"]      = card_geometry["card_height"]
+  		card_geometry["paper_width"]       = card_geometry["card_width"] + (@bleed ? BLEED_MARGIN : 0.0)
+  		card_geometry["paper_height"]      = card_geometry["card_height"] + (@bleed ? BLEED_MARGIN : 0.0)
   	else
   		card_geometry["paper_width"]       = PAPER_WIDTH
   		card_geometry["paper_height"]      = PAPER_HEIGHT
@@ -70,39 +73,40 @@ class CardPdf
   end
 
   def draw_grid(card_geometry)
+    unless (@bleed && @one_per_page)
+      stroke do
+    		if card_geometry["rounded_corners"] == false
+    			#Draw vertical lines
+    			0.upto(card_geometry["cards_across"]) do |i|
+    				line(
+    					[card_geometry["card_width"]*i, 0],
+    					[card_geometry["card_width"]*i, card_geometry["page_height"]]
+    					)
+    			end
 
-  	stroke do
-  		if card_geometry["rounded_corners"] == false
-  			#Draw vertical lines
-  			0.upto(card_geometry["cards_across"]) do |i|
-  				line(
-  					[card_geometry["card_width"]*i, 0],
-  					[card_geometry["card_width"]*i, card_geometry["page_height"]]
-  					)
-  			end
+    			#Draw horizontal lines
+    			0.upto(card_geometry["cards_high"]) do |i|
+    				line(
+    					[0,                           card_geometry["card_height"]*i],
+    					[card_geometry["page_width"], card_geometry["card_height"]*i]
+    					)
 
-  			#Draw horizontal lines
-  			0.upto(card_geometry["cards_high"]) do |i|
-  				line(
-  					[0,                           card_geometry["card_height"]*i],
-  					[card_geometry["page_width"], card_geometry["card_height"]*i]
-  					)
-
-  			end
-  		else
-  			0.upto(card_geometry["cards_across"]-1) do |i|
-  				0.upto(card_geometry["cards_high"]-1) do |j|
-  					#rectangle bounded by upper left corner, horizontal measured from the left, vertical measured from the bottom
-  					rounded_rectangle(
-  								[i*card_geometry["card_width"], card_geometry["card_height"]+(j*card_geometry["card_height"])],
-  								card_geometry["card_width"],
-  								card_geometry["card_height"],
-  								card_geometry["rounded_corners"]
-  								)
-  				end
-  			end
-  		end
-  	end
+    			end
+    		else
+    			0.upto(card_geometry["cards_across"]-1) do |i|
+    				0.upto(card_geometry["cards_high"]-1) do |j|
+    					#rectangle bounded by upper left corner, horizontal measured from the left, vertical measured from the bottom
+    					rounded_rectangle(
+    								[i*card_geometry["card_width"], card_geometry["card_height"]+(j*card_geometry["card_height"])],
+    								card_geometry["card_width"],
+    								card_geometry["card_height"],
+    								card_geometry["rounded_corners"]
+    								)
+    				end
+    			end
+    		end
+    	end
+    end
   end
 
   def box(card_geometry, index, &blck)
@@ -133,7 +137,7 @@ class CardPdf
 
   def render_card_page(card_geometry, icon, statements, background_color, text_color)
   	font "Helvetica", :style => :normal
-  	font_size = 14
+  	font_size 14
   	line_width(0.5);
 
     canvas do

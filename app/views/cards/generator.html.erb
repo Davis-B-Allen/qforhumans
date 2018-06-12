@@ -36,6 +36,18 @@
   <br>
   <br>
 
+  <b>Bleed on individual cards (1/8"):</b>
+  <br>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag :bleed, "false", checked: "true" %> No Bleed
+  <% end %>
+  <%= label_tag nil, nil, class: "radio-inline" do %>
+    <%= radio_button_tag :bleed, "true" %> Include Bleed
+  <% end %>
+
+  <br>
+  <br>
+
   <b>DPI:</b>
   <br>
   <%= label_tag nil, nil, class: "radio-inline" do %>
