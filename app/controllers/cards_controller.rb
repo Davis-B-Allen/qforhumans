@@ -38,9 +38,13 @@ class CardsController < ApplicationController
       format.html do
         pdf_file = Rails.root.join('tmp/cards.pdf')
         pdf.render_file pdf_file
-        zipfile_name = PdfConverter.create_images pdf_file, dpi, email
-        File.delete(pdf_file) if File.exist?(pdf_file)
-        send_file zipfile_name
+        # instead of doing this now, create a job
+        # zipfile_name = PdfConverter.create_images pdf_file, dpi, email
+        # File.delete(pdf_file) if File.exist?(pdf_file)
+        # send_file zipfile_name
+        GenerateAndSendPngsJob.perform_later(pdf_file.to_s, dpi, email)
+        flash[:success] = "Your generated images will be emailed to the address you provided"
+        redirect_to '/cards/generator'
       end
       format.pdf do
         send_data pdf.render,
