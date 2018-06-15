@@ -27,6 +27,7 @@ class CardsController < ApplicationController
     card_size   = params["cardsize"]
     page_layout = params["pagelayout"]
     dpi = params["dpi"].to_i
+    email = params["email"]
     background_color = params["background_color"]
     text_color = params["text_color"]
     bleed = params["bleed"]
@@ -37,7 +38,7 @@ class CardsController < ApplicationController
       format.html do
         pdf_file = Rails.root.join('tmp/cards.pdf')
         pdf.render_file pdf_file
-        zipfile_name = PdfConverter.create_images pdf_file, dpi
+        zipfile_name = PdfConverter.create_images pdf_file, dpi, email
         File.delete(pdf_file) if File.exist?(pdf_file)
         send_file zipfile_name
       end
