@@ -129,7 +129,7 @@ class CardPdf
   			logo_max_width = card_geometry["card_width"]/2
   			image icon, fit: [logo_max_width,logo_max_height], at: [bounds.left,bounds.bottom+25]
   			font "Helvetica", :style => :normal
-  			text_box "Cards Against Inanity", size:8, align: :left, width:100, at: [bounds.left+20,bounds.bottom+20]
+  			text_box "AgreeToCare.com", size:8, align: :left, width:100, at: [bounds.left+20,bounds.bottom+20]
   		end
   		idx = idx + 1
   	end
